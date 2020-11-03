@@ -40,13 +40,13 @@ const headCells = [
 ];
 
 
-const MyOrdersPage = (props) => {
+const MyOrdersPage = () => {
 
     const classes = useStyles();
 
     return (
         <Fragment>
-            <NavbarHeader/>
+            <NavbarHeader isLoggedIn/>
             <Header
                 text={"My orders - overview"}
                 style={classes.header}

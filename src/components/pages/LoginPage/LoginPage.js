@@ -3,7 +3,8 @@ import { makeStyles, TextField, Typography, Button, Switch } from "@material-ui/
 import { Formik } from "formik";
 import { ValidationSchemaLight } from "../../other/ValidationSchemaLight";
 import BrandTitle from "../../atoms/BrandTitle/BrandTitle";
-
+import SessionHandler from "../../other/SessionHandler";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     title: {
@@ -31,6 +32,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const LoginPage = () => {
+    const history = useHistory();
+
     const [showPassword, setShowPassword] = useState(false);
     const [typePassword, setTypePassword] = useState("password");
     const [textShowPassword, setTextShowPassword] = useState("Show password")
@@ -59,6 +62,8 @@ const LoginPage = () => {
             onSubmit={(values) => {
                 const dto = { ...object, ...values };
                 console.log('DTO: ', dto)
+                SessionHandler.getSignedIn(dto);
+                history.push('/');
             }}
         >
             {({ handleSubmit, errors, touched, handleChange }) => {

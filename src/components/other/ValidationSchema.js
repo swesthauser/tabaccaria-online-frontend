@@ -1,7 +1,9 @@
 import * as Yup from "yup";
 
 const regexName = /^[a-zA-Z äöüéèàÜÖÄÉÈÀ,+-]+$/;
-const validationName = "Must have only letters or ' ', '+', '-";
+const regexLetter = /^[a-zA-Z äöüéèàÜÖÄÉÈÀ]+$/;
+const validationName = "Must have only letters or ' ', '+', '-'";
+const validationLetter = "Must have only letters";
 const validationMaxNames = "Max. 50 characters";
 const validationsMaxPasswords = "Max. 30 characters";
 const validationsMaxAddress = "Max. 250 characters";
@@ -56,6 +58,6 @@ export const ValidationSchema = Yup.object().shape({
     country: Yup.string()
         .trim()
         .required('Country required')
-        .matches(regexName, validationName)
+        .matches(regexLetter, validationLetter)
         .max(50,validationMaxNames)
 });
