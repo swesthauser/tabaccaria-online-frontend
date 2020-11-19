@@ -1,9 +1,9 @@
 import React, { Fragment, useState, useEffect } from "react";
-import NavbarHeader from "../../molecules/NavbarHeader/NavbarHeader";
 import ArticleCard from "../../organisms/ArticleCard/ArticleCard";
 import { makeStyles, Grid } from '@material-ui/core/';
 import Header from "../../atoms/Header/Header";
-import axios from "axios";
+import UserService from '../../../service/UserService';
+
 
 const useStyles = makeStyles((theme) => ({
     header: {
@@ -29,17 +29,14 @@ const useStyles = makeStyles((theme) => ({
 // ];
 
 const MyFavoritesPage = (props) => {
-    const [articles, setArticles] = useState([]);
     const classes = useStyles();
+
+    const [articles, setArticles] = useState([]);
+    
     const getOrders = () => {
-        axios.get('http://localhost:2020/users/favorites')
+        UserService.getFavoritesByUser(2)
             .then(res => {
-                let data = res.data;
-                console.log(res)
-                setArticles(data);
-            })
-            .catch(err => {
-                console.error('ERROR: ', err);
+                setArticles(res.data);
             })
     } 
 
@@ -50,7 +47,6 @@ const MyFavoritesPage = (props) => {
 
     return (
         <Fragment>
-            {/* <NavbarHeader isLoggedIn/> */}
             <Header
                 text={"My favorites - overview"}
                 style={classes.header}
@@ -61,7 +57,7 @@ const MyFavoritesPage = (props) => {
             >
                 {articles.map((a) => (
                     <Grid item xs={4}>
-                        <ArticleCard article={a} />
+                        <ArticleCard article={{...a, isFavorite: true}} pageMyFavorites/>
                     </Grid>
                     ))}
             </Grid>

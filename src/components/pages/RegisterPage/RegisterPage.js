@@ -2,7 +2,6 @@ import React, { Fragment, useState, useEffect } from "react";
 import { makeStyles, TextField, Typography, Button, Switch } from "@material-ui/core";
 import { Formik } from "formik";
 import { ValidationSchema } from "../../other/ValidationSchema";
-import BrandTitle from "../../atoms/BrandTitle/BrandTitle";
 import NavbarHeader from "../../molecules/NavbarHeader/NavbarHeader";
 
 

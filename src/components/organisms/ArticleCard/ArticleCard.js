@@ -29,7 +29,8 @@ const useStyles = makeStyles((theme) => ({
         textDecoration: 'line-through',
     },
     priceExtraMargin: {
-        paddingBottom: "45px"
+        paddingBottom: "45px",
+        fontWeight: "bold"
     },
     salePrice: {
         color: 'red',
@@ -55,17 +56,25 @@ const useStyles = makeStyles((theme) => ({
 
 
 // TO DO: GRID
-export default function ArticleCard({ article }) {
+export default function ArticleCard({ article, pageMyFavorites }) {
     const classes = useStyles();
 
     const [open, setOpen] = useState(false);
+    const [isFavorite, setIsFavorite] = useState(article.isFavorite);
 
     const handlerOpen = () => {
         setOpen(!open);
     }
 
-    const getRandomImage = (w, h) => {
-        var source = 'https://source.unsplash.com/random/' + w + 'x' + h + '/?smoke,tobacco'
+    const handleFavorite = () => {
+        setIsFavorite(!isFavorite);
+        console.log('Change isFavorite-State');
+        // TO DO
+        // API REQUEST 
+    }
+
+    const getRandomImage = (w, h, key) => {
+        var source = 'https://source.unsplash.com/random/' + w + 'x' + h + '/?smoke,tobacco' + key
         return source;
     }
 
@@ -81,7 +90,7 @@ export default function ArticleCard({ article }) {
         <Card className={classes.root}>
             <CardMedia
                 className={classes.media}
-                image={getRandomImage(500, 500)}
+                image={getRandomImage(500, 500, article.id)}
                 onClick={() => console.log('Click on the card')}
             />
             <CardContent
@@ -116,9 +125,9 @@ export default function ArticleCard({ article }) {
             </CardContent>
             <CardActions disableSpacing>
                 <IconButton
-                    title={"Add to my favorites"}
-                    onClick={() => console.log('Add to personal favorites')}
-                    className={article.isFavorite ? classes.favoriteIcon : null}
+                    title={isFavorite ? "Remove from my favorites" : "Add to my favorites"}
+                    onClick={() => handleFavorite()}
+                    className={isFavorite ? classes.favoriteIcon : null}
                 >
                     <FavoriteIcon />
                 </IconButton>
@@ -136,6 +145,5 @@ export default function ArticleCard({ article }) {
                 article={article}
             />
         </Card>
-
     );
 }

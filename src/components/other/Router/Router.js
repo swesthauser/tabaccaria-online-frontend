@@ -1,5 +1,5 @@
-import React, { useContext } from "react";
-import { Route, Switch, useHistory } from "react-router-dom";
+import React from "react";
+import { Route, Switch } from "react-router-dom";
 import RootPage from "../../pages/RootPage/RootPage";
 import LoginPage from "../../pages/LoginPage/LoginPage";
 import RegisterPage from "../../pages/RegisterPage/RegisterPage";

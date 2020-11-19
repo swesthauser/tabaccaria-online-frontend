@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useContext } from "react";
-import { useHistory, withRouter, Redirect } from "react-router-dom";
+import React, { useContext } from "react";
+// import { useHistory, withRouter, Redirect } from "react-router-dom";
 import { makeStyles, Badge } from '@material-ui/core/';
 import { Avatar, AppBar } from '@material-ui/core';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -28,25 +28,14 @@ const useStyles = makeStyles((theme) => ({
         marginTop: "20px",
     },
     avatar: {
-        backgroundColor: "#C6E2FA"
+        backgroundColor: "red",
     }
 }));
 
 const NavbarHeader = ({ isLoggedIn }) => {
     const classes = useStyles();
-    // const {logout} = useContext(SessionHandler);
-    const history = useHistory();
-    // const [user, setUser] = useState(isLoggedIn ? SessionHandler.getLoggedUser(history) : {});
-
-
-
-    // useEffect(() => {
-    //     if (isLoggedIn) {
-    //         setUser(SessionHandler.getLoggedUser(history));
-    //     } else {
-    //         setUser({});
-    //     }
-    // }, [isLoggedIn, history])
+    const { user, logout } = useContext(SessionHandlerContext);
+    // const history = useHistory();
 
     return (
         <div className={classes.root}>
@@ -61,8 +50,8 @@ const NavbarHeader = ({ isLoggedIn }) => {
                             color="inherit"
                             title="Get logged out"
                             onClick={() => {
-                                console.log('Logout')
-                                }}
+                                logout();
+                            }}
                         >
                             <ExitToAppIcon />
                         </Button>
@@ -73,16 +62,20 @@ const NavbarHeader = ({ isLoggedIn }) => {
                             title="Get signed in"
                             href="/login"
                         >
-                            <LockIcon/>
+                            <LockIcon />
                         </Button>
-                    : null}
+                        : null}
 
                     <Button
                         color="inherit"
                         title="My account"
                         href={isLoggedIn ? "/myorders" : "/login"}
                     >
-                        <PersonIcon />
+                        {isLoggedIn ?
+                            <Avatar className={classes.avatar}>{user.firstName.substring(0, 1).toUpperCase()+user.lastName.substring(0, 1).toUpperCase()}</Avatar>
+                        :
+                            <PersonIcon />
+                        }
                     </Button>
                     <Button
                         color="inherit"

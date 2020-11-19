@@ -29,9 +29,10 @@ export const SessionHandlerContextProvider = (props) => {
 
     const login = (data) => {
         axios.post('http://localhost:2020/login', data)
-            .then((response) => {
+            .then((res) => {
                 // localStorage.setItem("token", response.headers["authorization"])
-                setActiveUser(data)
+                setActiveUser(res.data)
+                history.push('/');
                 // setActiveUserAvatar(response.data.avatar)
             })
     }

@@ -1,11 +1,12 @@
-import React, { useState, useContext } from 'react';
-import { Route, useHistory } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { Route } from 'react-router-dom';
 import NavbarHeader from '../../molecules/NavbarHeader/NavbarHeader';
 import SessionHandlerContext from '../Context/SessionHandlerContext';
 
 const SecureRoute = (props) => {
     const { component: Component, ...rest } = props;
     const {user} = useContext(SessionHandlerContext);
+    
     return (
         <Route
             {...rest}

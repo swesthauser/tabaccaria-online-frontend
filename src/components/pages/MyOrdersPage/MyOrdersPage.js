@@ -1,8 +1,8 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment } from "react";
 import Table from "../../organisms/Table/Table";
 import { makeStyles } from '@material-ui/core/styles';
 import Header from "../../atoms/Header/Header";
-import axios from "axios";
+// import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
     header: {
@@ -41,17 +41,17 @@ const headCells = [
 
 const MyOrdersPage = () => {
     
+    const classes = useStyles();
+
     // const [orders, setOrders] = useState([]);
 
-    const classes = useStyles();
 
     // const getOrders = () => {
 
     //     axios.get('http://localhost:2020/orders')
     //         .then(res => {
-    //             let data = res.data;
-    //             console.log(res)
-    //             // setOrd(data);
+    //             console.log('Orders', res.data);
+    //             setOrders(res.data);
     //         })
     //         .catch(err => {
     //             console.error('ERROR: ', err);
@@ -64,7 +64,6 @@ const MyOrdersPage = () => {
 
     return (
         <Fragment>
-            {/* <NavbarHeader isLoggedIn/> */}
             <Header
                 text={"My orders - overview"}
                 style={classes.header}

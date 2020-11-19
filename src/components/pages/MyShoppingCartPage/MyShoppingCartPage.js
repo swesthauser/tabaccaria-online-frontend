@@ -1,7 +1,5 @@
-import React, { Fragment, useState, useEffect } from "react";
-import NavbarHeader from "../../molecules/NavbarHeader/NavbarHeader";
-import axios from "axios";
-import { makeStyles, Grid } from '@material-ui/core/';
+import React, { Fragment, useEffect } from "react";
+import { makeStyles } from '@material-ui/core/';
 import Header from "../../atoms/Header/Header";
 import Table from "../../organisms/Table/Table";
 
@@ -14,28 +12,24 @@ const useStyles = makeStyles((theme) => ({
 
 const MyShoppingCartPage = () => {
     const classes = useStyles();
-    const [user, setUser] = useState({});
-    const [articles, setArticles] = useState([]);
+    // const [articles, setArticles] = useState([]);
 
-    const getUser = () => {
-        setUser(JSON.parse(localStorage.getItem("user")));
-    }
-
-    const getArticles = () => {
-        axios.get('http://localhost:8080/cart/' + user.id)
-            .then(res => {
-                let data = res.data;
-                console.log(res)
-                setArticles(data);
-            })
-            .catch(err => {
-                console.error('ERROR: ', err);
-            })
-    }
+    // const getArticles = () => {
+    //     axios.get('http://localhost:8080/cart/' + user.id)
+    //         .then(res => {
+    //             let data = res.data;
+    //             console.log(res)
+    //             setArticles(data);
+    //         })
+    //         .catch(err => {
+    //             console.error('ERROR: ', err);
+    //         })
+    // }
 
     useEffect(() => {
-        getArticles();
-        getUser();
+        // getArticles();
+        // getUser();
+        // eslint-disable-next-line
     }, [])
 
     return (
