@@ -1,7 +1,8 @@
 import { Typography } from "@material-ui/core";
-import React, { Fragment } from "react";
+import React, { Fragment, useContext } from "react";
 import NavbarHeader from "../../molecules/NavbarHeader/NavbarHeader";
 import ArticleCard from "../../organisms/ArticleCard/ArticleCard";
+import SessionHandlerContext from "../../other/Context/SessionHandlerContext";
 // import { makeStyles } from '@material-ui/core/styles';
 
 // const useStyles = makeStyles((theme) => ({
@@ -10,6 +11,9 @@ import ArticleCard from "../../organisms/ArticleCard/ArticleCard";
 
 const RootPage = (props) => {
 
+    const { user } = useContext(SessionHandlerContext);
+
+    console.log('USER ', user)
     // const classes = useStyles();
 
     let exampleArticle = {
@@ -22,7 +26,7 @@ const RootPage = (props) => {
 
     return (
         <Fragment>
-            <NavbarHeader />
+            <NavbarHeader isLoggedIn={user != null ? true : false}/>
             <Typography />
             <ArticleCard article={exampleArticle} />            
         </Fragment>

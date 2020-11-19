@@ -1,10 +1,10 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect, useContext } from "react";
 import { makeStyles, TextField, Typography, Button, Switch } from "@material-ui/core";
 import { Formik } from "formik";
 import { ValidationSchemaLight } from "../../other/ValidationSchemaLight";
-import BrandTitle from "../../atoms/BrandTitle/BrandTitle";
-import SessionHandler from "../../other/SessionHandler";
 import { useHistory } from "react-router-dom";
+import SessionHandlerContext from "../../other/Context/SessionHandlerContext";
+import NavbarHeader from '../../molecules/NavbarHeader/NavbarHeader';
 
 const useStyles = makeStyles((theme) => ({
     title: {
@@ -33,6 +33,7 @@ const useStyles = makeStyles((theme) => ({
 
 const LoginPage = () => {
     const history = useHistory();
+    const { login } = useContext(SessionHandlerContext);
 
     const [showPassword, setShowPassword] = useState(false);
     const [typePassword, setTypePassword] = useState("password");
@@ -62,19 +63,14 @@ const LoginPage = () => {
             onSubmit={(values) => {
                 const dto = { ...object, ...values };
                 console.log('DTO: ', dto)
-                SessionHandler.getSignedIn(dto);
-                history.push('/');
+                login(dto);
             }}
         >
             {({ handleSubmit, errors, touched, handleChange }) => {
                 return (
                     <Fragment>
+                        <NavbarHeader isLoggedIn={false}/>
                         <form method="post" onSubmit={handleSubmit} onChange={handleChange}>
-                            <BrandTitle
-                                size={"h2"}
-                                styleText={classes.title}
-                                text={"Sign in"}
-                            />
                             <div className={classes.inputs}>
                                 <TextField
                                     id="email"

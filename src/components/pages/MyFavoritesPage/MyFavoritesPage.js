@@ -50,7 +50,7 @@ const MyFavoritesPage = (props) => {
 
     return (
         <Fragment>
-            <NavbarHeader />
+            {/* <NavbarHeader isLoggedIn/> */}
             <Header
                 text={"My favorites - overview"}
                 style={classes.header}

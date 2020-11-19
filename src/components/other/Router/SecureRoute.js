@@ -1,25 +1,23 @@
-import React from 'react';
-import { Route, Redirect, useHistory } from 'react-router-dom';
-import SessionHandler from '../../other/SessionHandler';
+import React, { useState, useContext } from 'react';
+import { Route, useHistory } from 'react-router-dom';
+import NavbarHeader from '../../molecules/NavbarHeader/NavbarHeader';
+import SessionHandlerContext from '../Context/SessionHandlerContext';
 
 const SecureRoute = (props) => {
-    const {component: Component, ...rest} = props;
-    let history = useHistory();
-
-    if (SessionHandler.isLoggedIn(history)) {
-        return (
-            <Route
-               {...rest}
-               render={props => (
-                   <Component {...props}/>
-               )}
-            />
-        )
-    } else {
-        console.error('Authorization failed');
-        // return (
-        //     <Redirect to="/"/>
-        // )
-    }
+    const { component: Component, ...rest } = props;
+    const {user} = useContext(SessionHandlerContext);
+    return (
+        <Route
+            {...rest}
+            render={props => (
+                <div>
+                    <NavbarHeader
+                        isLoggedIn={user != null ? true : false}
+                    />
+                    <Component {...props} />
+                </div>
+            )}
+        />
+    )
 }
 export default SecureRoute;

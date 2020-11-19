@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useHistory, withRouter, Redirect } from "react-router-dom";
 import { makeStyles, Badge } from '@material-ui/core/';
 import { Avatar, AppBar } from '@material-ui/core';
@@ -9,9 +9,8 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import PersonIcon from '@material-ui/icons/Person';
 import BrandTitle from "../../atoms/BrandTitle/BrandTitle";
-import SessionHandler from "../../other/SessionHandler";
+import SessionHandlerContext from "../../other/Context/SessionHandlerContext";
 import LockIcon from '@material-ui/icons/Lock';
-import { SignalCellularNullOutlined } from "@material-ui/icons";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -35,8 +34,19 @@ const useStyles = makeStyles((theme) => ({
 
 const NavbarHeader = ({ isLoggedIn }) => {
     const classes = useStyles();
+    // const {logout} = useContext(SessionHandler);
     const history = useHistory();
-    const [user, setUser] = useState(SessionHandler.getLoggedUser(history));
+    // const [user, setUser] = useState(isLoggedIn ? SessionHandler.getLoggedUser(history) : {});
+
+
+
+    // useEffect(() => {
+    //     if (isLoggedIn) {
+    //         setUser(SessionHandler.getLoggedUser(history));
+    //     } else {
+    //         setUser({});
+    //     }
+    // }, [isLoggedIn, history])
 
     return (
         <div className={classes.root}>
@@ -47,18 +57,12 @@ const NavbarHeader = ({ isLoggedIn }) => {
                         styleText={classes.title}
                     />
                     {isLoggedIn ?
-                        <Avatar
-                            className={classes.avatar}
-                            title={user.firstName + " " + user.lastName}
-                        >
-                            {user.firstName.substring(0, 1).toUpperCase() + user.lastName.substring(0, 1).toUpperCase()}
-                        </Avatar>
-                        : null}
-                    {isLoggedIn ?
                         <Button
                             color="inherit"
                             title="Get logged out"
-                            onClick={() => SessionHandler.getLoggedOut()}
+                            onClick={() => {
+                                console.log('Logout')
+                                }}
                         >
                             <ExitToAppIcon />
                         </Button>
@@ -76,14 +80,14 @@ const NavbarHeader = ({ isLoggedIn }) => {
                     <Button
                         color="inherit"
                         title="My account"
-                        href="/myorders"
+                        href={isLoggedIn ? "/myorders" : "/login"}
                     >
                         <PersonIcon />
                     </Button>
                     <Button
                         color="inherit"
                         title="My favorites"
-                        href="/myfavorites"
+                        href={isLoggedIn ? "/myfavorites" : "/login"}
                     >
                         <Badge
                             badgeContent={3}
@@ -95,6 +99,7 @@ const NavbarHeader = ({ isLoggedIn }) => {
                     <Button
                         color="inherit"
                         title="My shopping cart"
+                        href={isLoggedIn ? "/myshoppingcart" : "/login"}
                     >
                         <Badge
                             badgeContent={1}
@@ -108,4 +113,4 @@ const NavbarHeader = ({ isLoggedIn }) => {
         </div>
     );
 };
-export default withRouter(NavbarHeader);
+export default NavbarHeader;

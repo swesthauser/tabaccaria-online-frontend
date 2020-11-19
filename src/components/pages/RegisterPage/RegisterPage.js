@@ -3,6 +3,7 @@ import { makeStyles, TextField, Typography, Button, Switch } from "@material-ui/
 import { Formik } from "formik";
 import { ValidationSchema } from "../../other/ValidationSchema";
 import BrandTitle from "../../atoms/BrandTitle/BrandTitle";
+import NavbarHeader from "../../molecules/NavbarHeader/NavbarHeader";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -78,12 +79,8 @@ const RegisterPage = () => {
             {({ handleSubmit, errors, touched, handleChange }) => {
                 return (
                     <Fragment>
+                        <NavbarHeader isLoggedIn={false} />
                         <form method="post" onSubmit={handleSubmit} onChange={handleChange}>
-                            <BrandTitle
-                                size={"h2"}
-                                styleText={classes.title}
-                                text={"Sign up"}
-                            />
                             <div className={classes.inputs}>
                                 <TextField
                                     id="email"
@@ -107,6 +104,8 @@ const RegisterPage = () => {
                                     helperText={touched.emailRepeat ? errors.emailRepeat : null}
                                     className={classes.input}
                                 />
+                            </div>
+                            <div className={classes.inputs}>
                                 <TextField
                                     id="password"
                                     name="password"
@@ -179,6 +178,8 @@ const RegisterPage = () => {
                                     helperText={touched.zipAndPlace ? errors.zipAndPlace : null}
                                     className={classes.input}
                                 />
+                            </div>
+                            <div className={classes.inputs}>
                                 <TextField
                                     id="country"
                                     name="country"
