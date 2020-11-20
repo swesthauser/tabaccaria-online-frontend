@@ -12,7 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import DialogComp from "../../molecules/DialogComp/DialogComp";
 
 const useStyles = makeStyles((theme) => ({
-    root: {
+    card: {
         maxWidth: 345,
         margin: "20px",
     },
@@ -87,7 +87,7 @@ export default function ArticleCard({ article, pageMyFavorites }) {
      }
 
     return (
-        <Card className={classes.root}>
+        <Card className={classes.card}>
             <CardMedia
                 className={classes.media}
                 image={getRandomImage(500, 500, article.id)}
