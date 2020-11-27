@@ -59,7 +59,7 @@ const RootPage = (props) => {
             >
                 {articles.map((a) => (
                     <Grid item xs={4}>
-                        <ArticleCard article={{ ...a, isFavorite: getRandomValue() }} pageMyFavorites />
+                        <ArticleCard article={{ ...a, isFavorite: getRandomValue() }} shoppingCart={false} />
                     </Grid>
                 ))}
             </Grid>

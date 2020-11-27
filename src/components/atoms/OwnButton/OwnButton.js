@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const OwnButton = ({ onClickFunc, typeOfButton, hRef }) => {
+const OwnButton = ({ onClickFunc, typeOfButton, hRef, text, isNotChanged }) => {
 
     const classes = useStyles();
 
@@ -40,6 +40,12 @@ const OwnButton = ({ onClickFunc, typeOfButton, hRef }) => {
             : null}
             {typeOfButton === 'cancel' ?
             <Button onClick={onClickFunc} className={classes.buttonCancel} href={hRef} variant="outlined">Cancel</Button>
+            : null}
+            {typeOfButton === 'buy' ?
+            <Button onClick={onClickFunc} className={classes.buttonSubmit} href={hRef} variant="outlined">Buy</Button>
+            : null}
+            {typeOfButton === 'formikSubmit' ?
+            <Button type="submit" disabled={isNotChanged} onClick={onClickFunc} className={classes.buttonSubmit} href={hRef} variant="outlined">{text}</Button>
             : null}
         </div>
     );

@@ -10,6 +10,7 @@ import clsx from 'clsx';
 import { Avatar, CardContent } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import DialogComp from "../../molecules/DialogComp/DialogComp";
+import RemoveShoppingCartIcon from '@material-ui/icons/RemoveShoppingCart';
 
 const useStyles = makeStyles((theme) => ({
     card: {
@@ -56,12 +57,13 @@ const useStyles = makeStyles((theme) => ({
 
 
 // TO DO: GRID
-export default function ArticleCard({ article, pageMyFavorites }) {
+export default function ArticleCard({ article, shoppingCart }) {
+    
     const classes = useStyles();
 
     const [open, setOpen] = useState(false);
     const [isFavorite, setIsFavorite] = useState(article.isFavorite);
-
+    
     const handlerOpen = () => {
         setOpen(!open);
     }
@@ -107,7 +109,7 @@ export default function ArticleCard({ article, pageMyFavorites }) {
                     align={"right"}
                     className={article.salePrice ? classes.price : classes.priceExtraMargin}
                 >
-                    {isInt(article.price) ?
+                    Fr. {isInt(article.price) ?
                     article.price + ".-"
                     :
                     article.price}
@@ -123,6 +125,7 @@ export default function ArticleCard({ article, pageMyFavorites }) {
                     : null}
 
             </CardContent>
+            {!shoppingCart ?
             <CardActions disableSpacing>
                 <IconButton
                     title={isFavorite ? "Remove from my favorites" : "Add to my favorites"}
@@ -139,6 +142,17 @@ export default function ArticleCard({ article, pageMyFavorites }) {
                     <ShoppingCartIcon />
                 </IconButton>
             </CardActions>
+            : 
+            <CardActions disableSpacing>
+                <IconButton
+                    title={"Remove from my shopping cart"}
+                    onClick={() => console.log('Remove article with id ' + article.id)}
+                    className={clsx(classes.expand)}
+                >
+                    <RemoveShoppingCartIcon/>
+                </IconButton>
+            </CardActions>
+            }
             <DialogComp
                 isOpen={open}
                 handler={handlerOpen}

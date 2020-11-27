@@ -69,7 +69,7 @@ const NavbarHeader = ({ isLoggedIn }) => {
                     <Button
                         color="inherit"
                         title="My account"
-                        href={isLoggedIn ? "/myorders" : "/login"}
+                        href={isLoggedIn ? "/myaccount" : "/login"}
                     >
                         {isLoggedIn ?
                             <Avatar className={classes.avatar}>{user.firstName.substring(0, 1).toUpperCase()+user.lastName.substring(0, 1).toUpperCase()}</Avatar>
