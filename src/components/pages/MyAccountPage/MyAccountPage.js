@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useContext } from "react";
+import React, { Fragment, useState, useContext, useEffect } from "react";
 import Table from "../../organisms/Table/Table";
 import { makeStyles, BottomNavigation, BottomNavigationAction, Paper } from '@material-ui/core';
 import Header from "../../atoms/Header/Header";
@@ -7,6 +7,9 @@ import FaceIcon from '@material-ui/icons/Face';
 import StoreIcon from '@material-ui/icons/Store';
 import SessionHandlerContext from "../../other/Context/SessionHandlerContext";
 import PersonalData from "../../organisms/PersonalData/PersonalData";
+import ArticleManagement from "../../organisms/ArticleManagement/ArticleManagement";
+import UserService from "../../../service/UserService";
+
 
 const useStyles = makeStyles((theme) => ({
     header: {
@@ -55,24 +58,23 @@ const MyAccountPage = () => {
 
     const classes = useStyles();
 
-    // const [orders, setOrders] = useState([]);
+    const [articlesToManage, setArticlesToManage] = useState([]);
 
 
-    // const getOrders = () => {
+    const getArticlesToManage = () => {
+        UserService.getOwnArticles(user.id)
+            .then(res => {
+                setArticlesToManage(res.data);
+            })
+            .catch(err => {
+                console.error('Error in MyAccountPage: ', err);
+            });
+    }
 
-    //     axios.get('http://localhost:2020/orders')
-    //         .then(res => {
-    //             console.log('Orders', res.data);
-    //             setOrders(res.data);
-    //         })
-    //         .catch(err => {
-    //             console.error('ERROR: ', err);
-    //         })
-    // }
-
-    // useEffect(() => {
-    //    getOrders();
-    // }, [])
+    useEffect(() => {
+       getArticlesToManage();
+       // eslint-disable-next-line
+    }, [])
 
     const [value, setValue] = useState('orders');
 
@@ -109,7 +111,7 @@ const MyAccountPage = () => {
                     <PersonalData data={user} />
                     : null}
                 {value === 'articles' ?
-                    null
+                    <ArticleManagement articles={articlesToManage}/>
                     : null}
             </Paper>
         </Fragment>

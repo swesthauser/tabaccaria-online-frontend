@@ -52,14 +52,14 @@ const RootPage = (props) => {
 
     return (
         <Fragment>
-            <NavbarHeader isLoggedIn={user != null ? true : false} />
+            <NavbarHeader/>
             <Typography />
             <Grid
                 container
             >
                 {articles.map((a) => (
                     <Grid item xs={4}>
-                        <ArticleCard article={{ ...a, isFavorite: getRandomValue() }} shoppingCart={false} />
+                        <ArticleCard article={{ ...a, isFavorite: getRandomValue() }} shoppingCartView={false} />
                     </Grid>
                 ))}
             </Grid>

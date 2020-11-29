@@ -1,7 +1,6 @@
 import React, { Fragment, useEffect, useState, useCallback } from "react";
 import { makeStyles, Grid, Paper, Card, CardContent, CardActions, Typography, Button } from '@material-ui/core/';
 import Header from "../../atoms/Header/Header";
-import Table from "../../organisms/Table/Table";
 import ArticleCard from "../../organisms/ArticleCard/ArticleCard";
 import InputNumber from "../../atoms/InputNumber/InputNumber";
 import ArticleService from "../../../service/ArticleService";
@@ -41,17 +40,6 @@ const useStyles = makeStyles((theme) => ({
         marginTop: "150px"
     }
 }));
-
-
-let exampleArticle = {
-    id: "1",
-    title: "Winston Beuteltabak 25g",
-    description: "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.",
-    price: "5.20",
-    salePrice: "3.50",
-    isFavorite: true,
-    amount: "2",
-};
 
 const MyShoppingCartPage = () => {
     const classes = useStyles();
@@ -141,7 +129,7 @@ const MyShoppingCartPage = () => {
                             {articles.map(a => (
                                 <Grid container spacing={3}>
                                     <Grid item xs={9}>
-                                        <ArticleCard article={a} shoppingCart />
+                                        <ArticleCard article={a} shoppingCartView />
                                     </Grid>
                                     <Grid item xs={3}>
                                         <div className={classes.inputNumber}>

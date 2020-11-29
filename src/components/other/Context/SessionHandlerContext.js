@@ -1,17 +1,20 @@
 import React, { createContext, useState, useEffect } from "react";
 import { useHistory } from 'react-router-dom'
 import axios from 'axios';
-
+// import UserService from "../../../service/UserService";
+// import ArticleService from "../../../service/ArticleService";
 const SessionHandlerContext = createContext();
 export default SessionHandlerContext;
 
 export const SessionHandlerContextProvider = (props) => {
     const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+    // const [favorites, setFavorites] = useState([]);
+    // const [shoppingCart, setShoppingCart] = useState([])
     const history = useHistory();
 
     const setActiveUser = (user) => {
         localStorage.setItem("user", JSON.stringify(user));
-        setUser(user);
+        setUser(user);        
         // AuthorityService.initAuthoritySet(user);
     };
 
@@ -38,16 +41,7 @@ export const SessionHandlerContextProvider = (props) => {
     }
 
     const loadActiveUser = () => {
-        // UserService.getOwnUser().then(res => {
-
-        //     setActiveUser(res.data);
-        // });
-
-        // UserService.getOwnAvatar().then(res => {
-        //     setActiveUserAvatar(res.data.avatar);
-        // })
         setActiveUser(JSON.parse(localStorage.getItem('user')));
-
     };
 
     useEffect(() => {
@@ -63,7 +57,7 @@ export const SessionHandlerContextProvider = (props) => {
                     setActiveUser,
                     login,
                     logout,
-                    loadActiveUser
+                    loadActiveUser,
                 }}
             >
                 {props.children}

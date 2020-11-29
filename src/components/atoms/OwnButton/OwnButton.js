@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
         },
         '&:disabled': {
             color: "grey",
-            backgroundColor: "#FFFFFF"
+            backgroundColor: "#FFFFFF",
         }
     },
     buttonCancel: {
@@ -26,6 +26,18 @@ const useStyles = makeStyles((theme) => ({
             color: "grey",
             backgroundColor: "#FFFFFF"
         }
+    },
+    buttonConfirm: {
+        backgroundColor: "green",
+        border: "none",
+        color: "#FFFFFF",
+        '&:hover': {
+            color: "green"
+        },
+        '&:disabled': {
+            color: "grey",
+            backgroundColor: "#FFFFFF",
+        }
     }
 }));
 
@@ -36,16 +48,19 @@ const OwnButton = ({ onClickFunc, typeOfButton, hRef, text, isNotChanged }) => {
     return (
         <div>
             {typeOfButton === 'submit' ?
-            <Button onClick={onClickFunc} className={classes.buttonSubmit} href={hRef} variant="outlined">Submit</Button>
+                <Button onClick={onClickFunc} className={classes.buttonSubmit} href={hRef} variant="outlined">Submit</Button>
             : null}
             {typeOfButton === 'cancel' ?
-            <Button onClick={onClickFunc} className={classes.buttonCancel} href={hRef} variant="outlined">Cancel</Button>
+                <Button onClick={onClickFunc} className={classes.buttonCancel} href={hRef} variant="outlined">Cancel</Button>
             : null}
             {typeOfButton === 'buy' ?
-            <Button onClick={onClickFunc} className={classes.buttonSubmit} href={hRef} variant="outlined">Buy</Button>
+                <Button onClick={onClickFunc} className={classes.buttonSubmit} href={hRef} variant="outlined">Buy</Button>
             : null}
             {typeOfButton === 'formikSubmit' ?
-            <Button type="submit" disabled={isNotChanged} onClick={onClickFunc} className={classes.buttonSubmit} href={hRef} variant="outlined">{text}</Button>
+                <Button type="submit" disabled={isNotChanged} onClick={onClickFunc} className={classes.buttonSubmit} href={hRef} variant="outlined">{text}</Button>
+            : null}
+            {typeOfButton === 'confirm' ?
+                <Button onClick={onClickFunc} className={classes.buttonConfirm} variant={"outlined"}>Confirm</Button>
             : null}
         </div>
     );

@@ -1,11 +1,9 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Route } from 'react-router-dom';
 import NavbarHeader from '../../molecules/NavbarHeader/NavbarHeader';
-import SessionHandlerContext from '../Context/SessionHandlerContext';
 
 const SecureRoute = (props) => {
     const { component: Component, ...rest } = props;
-    const {user} = useContext(SessionHandlerContext);
     
     return (
         <Route
@@ -13,7 +11,6 @@ const SecureRoute = (props) => {
             render={props => (
                 <div>
                     <NavbarHeader
-                        isLoggedIn={user != null ? true : false}
                     />
                     <Component {...props} />
                 </div>

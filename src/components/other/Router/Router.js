@@ -7,6 +7,7 @@ import MyAccountPage from "../../pages/MyAccountPage/MyAccountPage";
 import MyFavoritesPage from "../../pages/MyFavoritesPage/MyFavoritesPage";
 import MyShoppingCartPage from "../../pages/MyShoppingCartPage/MyShoppingCartPage";
 import SecureRoute from "../Router/SecureRoute";
+import ArticleSinglePage from "../../pages/ArticleSinglePage/ArticleSinglePage";
 
 const Router = () => {
 
@@ -15,6 +16,7 @@ const Router = () => {
             <Route exact path={"/"} component={RootPage} />
             <Route exact path={"/login"} component={LoginPage} />
             <Route exact path={"/signup"} component={RegisterPage} />
+            <Route exact path={"/articles/:id"} component={ArticleSinglePage} />
             <SecureRoute exact path={"/myaccount"} component={MyAccountPage} />
             <SecureRoute exact path={"/myfavorites"} component={MyFavoritesPage} />
             <SecureRoute exact path={"/myshoppingcart"} component={MyShoppingCartPage} />

@@ -1,9 +1,10 @@
 import React, { Fragment, useState, useEffect, useContext } from "react";
 import { makeStyles, TextField, Typography, Button, Switch } from "@material-ui/core";
 import { Formik } from "formik";
-import { ValidationSchemaLight } from "../../other/ValidationSchemaLight";
+import { ValidationSchemaLight } from "../../other/Validation/ValidationSchemaLight";
 import SessionHandlerContext from "../../other/Context/SessionHandlerContext";
 import NavbarHeader from '../../molecules/NavbarHeader/NavbarHeader';
+import OwnButton from "../../atoms/OwnButton/OwnButton";
 
 const useStyles = makeStyles((theme) => ({
     title: {
@@ -39,7 +40,7 @@ const LoginPage = () => {
 
     const { login } = useContext(SessionHandlerContext);
 
-    const object = {
+    const loginObject = {
         email: '',
         password: ''
     }
@@ -56,11 +57,11 @@ const LoginPage = () => {
 
     return (
         <Formik
-            initialValues={object}
+            initialValues={loginObject}
             enableReinitialize
             validationSchema={ValidationSchemaLight}
             onSubmit={(values) => {
-                const dto = { ...object, ...values };
+                const dto = { ...loginObject, ...values };
                 login(dto);
             }}
         >
@@ -103,12 +104,10 @@ const LoginPage = () => {
                                 />
                                 {textShowPassword}
                                 <Typography />
-                                <Button
-                                    type="submit"
-                                    className={classes.button}
-                                >
-                                    Sign in
-                                </Button>
+                                <OwnButton
+                                    typeOfButton={"formikSubmit"}
+                                    text={"Sign in"}
+                                />
                                 <Typography className={classes.helperText}>
                                     Have you no account yet? Sign up <a className={classes.link} href="/signup">here</a>
                                 </Typography>

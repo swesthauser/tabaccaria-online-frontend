@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles, TextField, Typography, Button, Switch } from "@material-ui/core";
 import { Formik } from "formik";
-import { ValidationSchema } from "../../other/ValidationSchema";
-import { ValidationSchemaUpdate } from "../../other/ValidationSchemaUpdate";
+import { ValidationSchema } from "../../other/Validation/ValidationSchema";
+import { ValidationSchemaUpdate } from "../../other/Validation/ValidationSchemaUpdate";
 import OwnButton from "../../atoms/OwnButton/OwnButton";
 
 
@@ -66,7 +66,7 @@ const UserForm = ({ initialObject, modeRegister }) => {
                 console.log('User data: ', values)
             }}
         >
-            {({ handleSubmit, errors, touched, handleChange, initialValues, dirty }) => {
+            {({ handleSubmit, errors, touched, handleChange, initialValues, dirty, values }) => {
                 return (
                     <form method="post" onSubmit={handleSubmit} onChange={handleChange}>
                         <div className={classes.inputs}>
@@ -82,18 +82,20 @@ const UserForm = ({ initialObject, modeRegister }) => {
                                 className={classes.input}
                                 defaultValue={initialValues.email}
                             />
-                            <TextField
-                                id="emailRepeat"
-                                name="emailRepeat"
-                                label="Confirm email"
-                                required
-                                variant="outlined"
-                                type="text"
-                                error={errors.emailRepeat && touched.emailRepeat}
-                                helperText={touched.emailRepeat ? errors.emailRepeat : null}
-                                className={classes.input}
-                                defaultValue={initialValues.emailRepeat}
-                            />
+                            {!modeRegister && initialValues.email !== values.email ?
+                                <TextField
+                                    id="emailRepeat"
+                                    name="emailRepeat"
+                                    label="Confirm email"
+                                    required
+                                    variant="outlined"
+                                    type="text"
+                                    error={errors.emailRepeat && touched.emailRepeat}
+                                    helperText={touched.emailRepeat ? errors.emailRepeat : null}
+                                    className={classes.input}
+                                    defaultValue={initialValues.emailRepeat}
+                                />
+                            : null}
                         </div>
                         {modeRegister ?
                             <div className={classes.inputs}>
@@ -204,18 +206,20 @@ const UserForm = ({ initialObject, modeRegister }) => {
                                     {textShowPassword}
                                     <Typography />
                                 </div>
-                            : null}
+                                : null}
                             <OwnButton
                                 typeOfButton={"formikSubmit"}
-                                isNotChanged={!dirty}
+                                isNotChanged={!modeRegister ? !dirty : false}
                                 text={modeRegister ?
-                                    "Sign in"
+                                    "Sign up"
                                     : "Update"}
                             />
                             <Typography className={classes.helperText}>
-                                {modeRegister ?
-                                    "Have you an account yet? Sign in here"
-                                    : "You want to change your name?\nDue to security reasons you need to call our support service (Fr. 2.-/min)"}
+                                {modeRegister &&
+                                    <div>
+                                        Have you an account yet? Sign in <a className={classes.link} href={"/login"}>here</a>
+                                    </div>
+                                }
                             </Typography>
                         </div>
                     </form>
