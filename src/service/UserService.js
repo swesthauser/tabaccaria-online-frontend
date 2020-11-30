@@ -12,6 +12,15 @@ const UserService = {
     },
     getOwnArticles: (id) => {
         return api.get(`/users/${id}/own`);
+    },
+    addFavorite: (userDTO, userId, articleId) => {
+        return api.put(`/users/${userId}/addArticle/${articleId}`, userDTO);
+    },
+    removeFavorite: (userDTO, userId, articleId) => {
+        return api.put(`/users/${userId}/removeArticle/${articleId}`, userDTO);
+    },
+    update: (id, dto) => {
+        return api.put(`/users/${id}`, dto);
     } 
 };
 

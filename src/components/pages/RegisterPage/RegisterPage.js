@@ -2,30 +2,27 @@ import React, { Fragment } from "react";
 import { makeStyles } from "@material-ui/core";
 import NavbarHeader from "../../molecules/NavbarHeader/NavbarHeader";
 import UserForm from "../../organisms/UserForm/UserForm";
+import { useHistory } from "react-router-dom";
 
 
 const useStyles = makeStyles((theme) => ({
 
 }));
 
-const onSubmit = (object, values) => {
-    const dto = { ...object, ...values };
-    console.log('DTO: ', dto)
-}
-
 const object = {
     email: '',
     emailRepeat: '',
     password: '',
     passwordRepeat: '',
-    firstname: '',
-    lastname: '',
-    streetAndNumber: '',
-    zipAndPlace: '',
-    country: ''
+    firstName: '',
+    lastName: '',
+    streetNumber: '',
+    zipPlace: ''
 }
 
 const RegisterPage = () => {
+
+    const history = useHistory();
 
     return (
         <Fragment>
@@ -33,6 +30,9 @@ const RegisterPage = () => {
             <UserForm
                 initialObject={object}
                 modeRegister
+                goToLogin={() => {
+                    history.push('/login');
+                }}
             />
         </Fragment>
     )

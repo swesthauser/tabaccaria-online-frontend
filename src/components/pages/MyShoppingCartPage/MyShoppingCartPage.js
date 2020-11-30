@@ -1,10 +1,13 @@
-import React, { Fragment, useEffect, useState, useCallback } from "react";
+import React, { Fragment, useEffect, useState, useCallback, useContext } from "react";
 import { makeStyles, Grid, Paper, Card, CardContent, CardActions, Typography, Button } from '@material-ui/core/';
 import Header from "../../atoms/Header/Header";
 import ArticleCard from "../../organisms/ArticleCard/ArticleCard";
 import InputNumber from "../../atoms/InputNumber/InputNumber";
 import ArticleService from "../../../service/ArticleService";
 import OwnButton from "../../atoms/OwnButton/OwnButton";
+import OrderService from "../../../service/OrderService";
+import SessionHandlerContext from "../../other/Context/SessionHandlerContext";
+
 
 const useStyles = makeStyles((theme) => ({
     header: {
@@ -43,6 +46,7 @@ const useStyles = makeStyles((theme) => ({
 
 const MyShoppingCartPage = () => {
     const classes = useStyles();
+    const { user } = useContext(SessionHandlerContext);
     const [articles, setArticles] = useState([]);
     const [amount, setAmount] = useState();
     const [subtotal, setSubtotal] = useState(0);
@@ -50,14 +54,14 @@ const MyShoppingCartPage = () => {
     // const [articles, setArticles] = useState([]);
 
     const getArticles = () => {
-        ArticleService.getShoppingCart()
-            .then(res => {
-                console.log('RES: ', res.data)
-                setArticles(res.data);
-            })
-            .catch(err => {
-                console.error('Error in MyShoppingCartPage: ', err);
-            })
+        // OrderService.getOwnShoppingCart(user.id)
+        //     .then(res => {
+        //         setArticles(res.data);
+        //     })
+        //     .catch(err => {
+        //         console.error('Error in MyShoppingCartPage: ', err);
+        //     })
+        // TO DO - need progress in BE
     }
 
     const calculateSubtotal = () => {

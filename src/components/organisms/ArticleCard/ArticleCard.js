@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Card, Collapse } from '@material-ui/core';
 import CardMedia from '@material-ui/core/CardMedia';
@@ -14,6 +14,8 @@ import RemoveShoppingCartIcon from '@material-ui/icons/RemoveShoppingCart';
 import { useHistory } from 'react-router-dom';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ArticleService from '../../../service/ArticleService';
+import UserService from '../../../service/UserService';
+import SessionHandlerContext from '../../other/Context/SessionHandlerContext';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -67,26 +69,31 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function ArticleCard({ article, shoppingCart, detailView }) {
+export default function ArticleCard({ article, shoppingCart, detailView, handleFavorite, getFavorite }) {
+
+    const { ownFavorites } = useContext(SessionHandlerContext);
 
     /* Try getArticle over ArticleSinglePage */
     const classes = useStyles();
 
     const history = useHistory();
-
+    const [isFavorite, setIsFavorite] = useState(getFavorite);
     const [open, setOpen] = useState(false);
-    const [isFavorite, setIsFavorite] = useState(article.isFavorite);
     const [expanded, setExpaned] = useState(false);
 
     const handlerOpen = () => {
         setOpen(!open);
     }
 
-    const handleFavorite = () => {
-        setIsFavorite(!isFavorite);
-        console.log('Change isFavorite-State');
-        // TO DO
-        // API REQUEST 
+    const checkFormat = (nAsString) => {
+        var n = parseFloat(nAsString);
+        if (n % 1 === 0) {
+            return n + ".-"
+        } else if (n * 10 % 1 === 0) {
+            return n + "0";
+        } else {
+            return nAsString;
+        }
     }
 
     const handleExpanded = () => {
@@ -102,10 +109,6 @@ export default function ArticleCard({ article, shoppingCart, detailView }) {
         return Math.round((article.price - article.salePrice) / article.price * 100);
     }
 
-    const isInt = (n) => {
-        return n % 1 === 0;
-    }
-
     const getDetailView = () => {
         if (!detailView) {
             history.push('/articles/' + article.id);
@@ -113,7 +116,7 @@ export default function ArticleCard({ article, shoppingCart, detailView }) {
     }
 
     return (
-        <Card className={detailView ? classes.cardDetail : classes.card}>
+        <Card key={article.id} className={detailView ? classes.cardDetail : classes.card}>
             <CardMedia
                 className={classes.media}
                 image={getRandomImage(500, 500, article.id)}
@@ -161,10 +164,7 @@ export default function ArticleCard({ article, shoppingCart, detailView }) {
                     align={"right"}
                     className={article.salePrice ? classes.price : classes.priceExtraMargin}
                 >
-                    Fr. {isInt(article.price) ?
-                        article.price + ".-"
-                        :
-                        article.price}
+                    Fr. {checkFormat(article.price)}
                 </Typography>
                 {article.salePrice ?
                     <Typography
@@ -172,10 +172,7 @@ export default function ArticleCard({ article, shoppingCart, detailView }) {
                         align={"right"}
                         className={classes.salePrice}
                     >
-                        <Avatar className={classes.avatar}>-{getSaleInProcent()}%</Avatar> <b>Fr. {isInt(article.salePrice) ?
-                            article.salePrice + ".-"
-                            :
-                            article.salePrice}</b>
+                        <Avatar className={classes.avatar}>-{getSaleInProcent()}%</Avatar> <b>Fr. {checkFormat(article.salePrice)}</b>
                     </Typography>
                     : null}
 
@@ -184,7 +181,10 @@ export default function ArticleCard({ article, shoppingCart, detailView }) {
                 <CardActions disableSpacing>
                     <IconButton
                         title={isFavorite ? "Remove from my favorites" : "Add to my favorites"}
-                        onClick={() => handleFavorite()}
+                        onClick={() => {
+                            setIsFavorite(!isFavorite);
+                            handleFavorite(isFavorite, article)}
+                            }
                         className={isFavorite ? classes.favoriteIcon : null}
                     >
                         <FavoriteIcon />

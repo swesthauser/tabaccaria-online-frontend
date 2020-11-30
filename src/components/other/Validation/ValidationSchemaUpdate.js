@@ -43,9 +43,4 @@ export const ValidationSchemaUpdate = Yup.object().shape({
         .required('Zip and place required')
         .max(250, validationsMaxAddress)
     ,
-    country: Yup.string()
-        .trim()
-        .required('Country required')
-        .matches(regexLetter, validationLetter)
-        .max(50,validationMaxNames)
 });

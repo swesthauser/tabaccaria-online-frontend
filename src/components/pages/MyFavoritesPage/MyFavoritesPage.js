@@ -1,9 +1,10 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect, useContext } from "react";
 import ArticleCard from "../../organisms/ArticleCard/ArticleCard";
 import { makeStyles, Grid } from '@material-ui/core/';
 import Header from "../../atoms/Header/Header";
+import ArticleService from '../../../service/ArticleService';
+import SessionHandlerContext from '../../other/Context/SessionHandlerContext';
 import UserService from '../../../service/UserService';
-
 
 const useStyles = makeStyles((theme) => ({
     header: {
@@ -31,19 +32,36 @@ const useStyles = makeStyles((theme) => ({
 const MyFavoritesPage = (props) => {
     const classes = useStyles();
 
-    const [articles, setArticles] = useState([]);
-    
-    const getOrders = () => {
-        UserService.getFavoritesByUser(2)
+    const { user, addFavorite, removeFavorite } = useContext(SessionHandlerContext);
+
+    const [favorites, setFavorites] = useState([]);
+
+
+    const handleFavorite = (isFavorite, item) => {
+        if (!isFavorite) {
+            setFavorites(favorites.push(item));
+            addFavorite(user, user.id, item.id);
+        } else {
+            setFavorites(favorites.filter(a => a.id !== item.id));
+            removeFavorite(user, user.id, item.id);
+        }
+    }
+
+    const getFavorites = () => {
+        ArticleService.getFavorites(user.id)
             .then(res => {
-                setArticles(res.data);
+                setFavorites(res.data);
             })
-    } 
+            .catch(err => {
+                console.error('Error in SessionHandlerContext: ', err);
+            });
+    }
 
     useEffect(() => {
-        getOrders();
+        getFavorites(user.id);
+        // setFavorites(getFavorites);
         // eslint-disable-next-line
-      }, []);
+    }, [])
 
     return (
         <Fragment>
@@ -55,9 +73,9 @@ const MyFavoritesPage = (props) => {
             <Grid
                 container
             >
-                {articles.map((a) => (
+                {favorites.map((a) => (
                     <Grid item xs={4}>
-                        <ArticleCard article={{...a, isFavorite: true}} pageMyFavorites/>
+                        <ArticleCard article={a} handleFavorite={handleFavorite} pageMyFavorites getFavorite/>
                     </Grid>
                     ))}
             </Grid>

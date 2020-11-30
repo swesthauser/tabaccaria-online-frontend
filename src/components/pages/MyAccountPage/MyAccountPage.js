@@ -6,7 +6,7 @@ import ShoppingBasketIcon from '@material-ui/icons/ShoppingBasket';
 import FaceIcon from '@material-ui/icons/Face';
 import StoreIcon from '@material-ui/icons/Store';
 import SessionHandlerContext from "../../other/Context/SessionHandlerContext";
-import PersonalData from "../../organisms/PersonalData/PersonalData";
+import UserForm from "../../organisms/UserForm/UserForm";
 import ArticleManagement from "../../organisms/ArticleManagement/ArticleManagement";
 import UserService from "../../../service/UserService";
 
@@ -108,7 +108,7 @@ const MyAccountPage = () => {
                     />
                     : null}
                 {value === 'personalData' ?
-                    <PersonalData data={user} />
+                    <UserForm initialObject={user} modeRegister={false}/>
                     : null}
                 {value === 'articles' ?
                     <ArticleManagement articles={articlesToManage}/>

@@ -12,7 +12,7 @@ const exampleUser = {
 
 const PersonalData = ({ data }) => {
     return (
-        <UserForm initialObject={exampleUser} modeRegister={false}/>
+        <UserForm initialObject={data} modeRegister={false}/>
        )
 }
 export default PersonalData;

@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useCallback } from "react";
+import React, { useContext } from "react";
 import { makeStyles, Badge } from '@material-ui/core/';
 import { Avatar, AppBar } from '@material-ui/core';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -10,8 +10,8 @@ import PersonIcon from '@material-ui/icons/Person';
 import BrandTitle from "../../atoms/BrandTitle/BrandTitle";
 import SessionHandlerContext from "../../other/Context/SessionHandlerContext";
 import LockIcon from '@material-ui/icons/Lock';
-import ArticleService from "../../../service/ArticleService";
-import UserService from "../../../service/UserService";
+import { useHistory } from 'react-router-dom'
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -35,7 +35,29 @@ const useStyles = makeStyles((theme) => ({
 const NavbarHeader = () => {
 
     const classes = useStyles();
+    const history = useHistory();
     const { user, logout } = useContext(SessionHandlerContext);
+
+    const goToLogin = () => {
+        history.push('/login');
+    };
+
+    const goToAccount = () => {
+        history.push('/myaccount');
+    };
+
+    const goToFavorites = () => {
+        history.push('/myfavorites');
+    };
+
+    const goToShoppingCart = () => {
+        history.push('/myshoppingcart');
+    }
+
+    const goToStart = () => {
+        history.push('/');
+    }
+
 
     // const [countFavorites, setCountFavorites] = useState([]);
     // const [countShoppingCart, setCountShoppingCart] = useState([]);
@@ -74,6 +96,7 @@ const NavbarHeader = () => {
                     <BrandTitle
                         size={"h3"}
                         styleText={classes.title}
+                        onClickFunc={goToStart}
                     />
                     {user != null ?
                         <Button
@@ -90,7 +113,7 @@ const NavbarHeader = () => {
                         <Button
                             color="inherit"
                             title="Get signed in"
-                            href="/login"
+                            onClick={goToLogin}
                         >
                             <LockIcon />
                         </Button>
@@ -99,7 +122,7 @@ const NavbarHeader = () => {
                     <Button
                         color="inherit"
                         title="My account"
-                        href={user != null ? "/myaccount" : "/login"}
+                        onClick={user != null ? goToAccount : goToLogin}
                     >
                         {user != null ?
                             <Avatar className={classes.avatar}>{user.firstName.substring(0, 1).toUpperCase()+user.lastName.substring(0, 1).toUpperCase()}</Avatar>
@@ -110,10 +133,10 @@ const NavbarHeader = () => {
                     <Button
                         color="inherit"
                         title="My favorites"
-                        href={user != null ? "/myfavorites" : "/login"}
+                        onClick={user != null ? goToFavorites : goToLogin}
                     >
                         <Badge
-                            badgeContent={user != null ? 1 : null}
+                            badgeContent={null}
                             color="secondary"
                         >
                             <FavoriteIcon />
@@ -122,10 +145,10 @@ const NavbarHeader = () => {
                     <Button
                         color="inherit"
                         title="My shopping cart"
-                        href={user != null ? "/myshoppingcart" : "/login"}
+                        onClick={user != null ? goToShoppingCart : goToLogin}
                     >
                         <Badge
-                            badgeContent={user != null ? 1 : null}
+                            badgeContent={null}
                             color="secondary"
                         >
                             <ShoppingCartIcon />

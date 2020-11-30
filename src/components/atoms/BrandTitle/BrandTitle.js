@@ -10,11 +10,11 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const BrandTitle = ({ size, styleText, text }) => {
+const BrandTitle = ({ size, styleText, text, onClickFunc }) => {
     const classes = useStyles();
     return (
         <Button
-            href={"/"}
+            onClick={onClickFunc}
             className={classes.button}
             fullWidth
         >

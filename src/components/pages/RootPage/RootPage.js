@@ -12,11 +12,29 @@ import ArticleService from "../../../service/ArticleService";
 
 const RootPage = (props) => {
 
+    const { user, addFavorite, removeFavorite } = useContext(SessionHandlerContext);
+
+    const [favorites, setFavorites] = useState([]);
+
     const [articles, setArticles] = useState([]);
 
-    const { user } = useContext(SessionHandlerContext);
+
+
+    // const [favorites, setFavorites] = useState([]);
+
 
     // const classes = useStyles();
+
+    const getFavorites = (userId) => {
+        ArticleService.getFavorites(userId)
+            .then(res => {
+                setFavorites(res.data);
+            })
+            .catch(err => {
+                console.error('Error in RootPage: ', err);
+            })
+    }
+
 
     const getArticles = () => {
         ArticleService.getAll()
@@ -28,38 +46,62 @@ const RootPage = (props) => {
             });
     }
 
-    const getRandomValue = () => {
-        let number = Math.random()*100;
-        if (number >= 50) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+  
 
-    // let exampleArticle = {
-    //     id: "1",
-    //     title: "Winston Beuteltabak 25g",
-    //     price: "5.20",
-    //     salePrice: "3.50",
-    //     isFavorite: true
-    // };
+
+    // useEffect(() => {
+    //     getFavorites(user.id);
+    //     // eslint-disable-next-line
+    // }, [user])
+
+    useEffect(() => {
+        getFavorites(user.id);
+        // eslint-disable-next-line
+    }, [])
 
     useEffect(() => {
         getArticles();
         // eslint-disable-next-line
-    }, [])
+    }, [favorites, setFavorites])
+
+    const checkPartOfFavorites = (article) => {
+        // console.log('Favorites', ownFavorites)
+        // console.log('ARticle ', article)
+        // return favorites != null || favorites != undefined ? favorites.includes(article) : false;
+            let hasFound = (favorites !== undefined ? favorites.find(f => f.id === article.id) : false)
+            return hasFound;
+        // favorites.map((f) => {
+        //     if(f.id === article.id) {
+        //         return true;
+        //     };
+        // });
+        // ArticleService.getFavorites(user.id)
+        //     .then(res => {
+        //         return res.data.some(f => f.id === article.id);
+        //     })
+    }
+
+    const handleFavorite = (isFavorite, item) => {
+        if (!isFavorite) {
+            setFavorites(favorites.push(item));
+            addFavorite(user, user.id, item.id);
+        } else {
+            let newArray = favorites.filter(a => a.id !== item.id)
+            setFavorites(newArray);
+            removeFavorite(user, user.id, item.id);
+        }
+    }
 
     return (
         <Fragment>
-            <NavbarHeader/>
+            <NavbarHeader />
             <Typography />
             <Grid
                 container
             >
                 {articles.map((a) => (
                     <Grid item xs={4}>
-                        <ArticleCard article={{ ...a, isFavorite: getRandomValue() }} shoppingCartView={false} />
+                        <ArticleCard article={a} shoppingCartView={false} handleFavorite={handleFavorite} getFavorite={checkPartOfFavorites(a)} />
                     </Grid>
                 ))}
             </Grid>

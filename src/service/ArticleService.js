@@ -4,17 +4,20 @@ const ArticleService = {
     getAll: () => {
         return api.get('/articles');
     },
-    getShoppingCart: () => {
-        return api.get('/shoppingcart');
-    },
     getById: (id) => {
         return api.get(`/articles/${id}`);
     },
     create: (dto) => {
-        return api.get(`/articles`, dto);
+        return api.post(`/articles`, dto);
     },
     update: (dto) => {
-        return api.put(`/shoppingcart`, dto);
+        return api.put(`/articles`, dto);
+    },
+    getFavorites: (userId) => {
+        return api.get(`/articles/user/${userId}`)
+    },
+    delete: (id) => {
+        return api.delete(`/articles/${id}`);
     }
 };
 
