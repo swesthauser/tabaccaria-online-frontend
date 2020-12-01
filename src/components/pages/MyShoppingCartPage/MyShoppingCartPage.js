@@ -7,6 +7,7 @@ import ArticleService from "../../../service/ArticleService";
 import OwnButton from "../../atoms/OwnButton/OwnButton";
 import OrderService from "../../../service/OrderService";
 import SessionHandlerContext from "../../other/Context/SessionHandlerContext";
+import UserService from "../../../service/UserService";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -46,28 +47,23 @@ const useStyles = makeStyles((theme) => ({
 
 const MyShoppingCartPage = () => {
     const classes = useStyles();
-    const { user, getShoppingCart, personalShoppingCart, personalArticleInfo, personalArticles } = useContext(SessionHandlerContext);
+    const { user, getShoppingCart, personalShoppingCart, personalArticleInfo } = useContext(SessionHandlerContext);
     // const [articles, setArticles] = useState([]);
-    const [subtotal, setSubtotal] = useState(0);
-    const [total, setTotal] = useState(0);
+    const [subtotal, setSubtotal] = useState();
+    const [total, setTotal] = useState();
     const [freight, setFreight] = useState(5);
 
     const calculateSubtotal = () => {
         var num = 0;
         for (let i = 0; i < personalArticleInfo.length; i++) {
-            if (personalArticleInfo[i].article.salePrice !== null) {
+            if (personalArticleInfo[i].article.salePrice !== 0) {
                 num += parseFloat(personalArticleInfo[i].article.salePrice) * parseFloat(personalArticleInfo[i].quantity);
             } else {
                 num += parseFloat(personalArticleInfo[i].article.price) * parseFloat(personalArticleInfo[i].quantity);
             }
         }
         setSubtotal(num);
-        let freightCharges = getFreightCharges(num);
-        console.log('LIEFERKOSTEN ', freightCharges);
-        let total = num + freightCharges;
-        console.log('Total ', total)
-        setFreight(freightCharges);
-        setTotal(total);
+        calculateTotal(num);
     }
 
     const checkFormat = (n) => {
@@ -92,10 +88,16 @@ const MyShoppingCartPage = () => {
         }
     }
 
-    // const calculateTotal = () => {
-    //     setTotal(subtotal + getFreightCharges());
-    // };
+    const calculateTotal = (n) => {
+        let freightCharges = getFreightCharges(n);
+        console.log('LIEFERKOSTEN ', freightCharges);
+        let ztotal = n + freightCharges;
+        setFreight(freightCharges);
+        setTotal(ztotal);
+    };
 
+
+    
     // const getElements = () => {
     //     console.log('ZEIG ', ownShoppingCart.orderDetailsList)
     //    setElements(ownShoppingCart.orderDetailsList);
@@ -115,7 +117,17 @@ const MyShoppingCartPage = () => {
     }
 
     const removeArticleFromShoppingCart = (id) => {
-        console.log('Delete orderDetail with id: ', id)
+        OrderService.deleteOrderDetails(id)
+            .then(() => {})
+            .catch(err => {
+                console.error('Error in MyShoppingCartPage: ', err);
+            })
+            .finally(() => {
+                getShoppingCart(user.id);
+            });
+    }
+
+
         // TO DO
         // OrderService.deleteOrderDetails(id)
         //     .then(() => {
@@ -126,7 +138,7 @@ const MyShoppingCartPage = () => {
         //     .finally(() => {
         //         getShoppingCart(user.id);
         //     });
-    }
+    // }
 
     // const updateArticleInfo = (orderDetailId, dto) => {
     //     OrderService.updateOrderDetails(orderDetailId, dto)
@@ -141,27 +153,13 @@ const MyShoppingCartPage = () => {
 
     useEffect(() => {
         getShoppingCart(user.id);
-        // console.log('ZEIG 1', personalShoppingCart)
-        // console.log('ZEIG 2', personalArticleInfo)
-        // console.log('ZEIG 3', personalArticles)
         // eslint-disable-next-line
     }, [user])
-
-    // useEffect(() => {
-    //     getElements();
-    //     // eslint-disable-next-line
-    // }, [user])
 
     useEffect(() => {
         calculateSubtotal();
         // eslint-disable-next-line
-    }, [personalArticleInfo])
-
-    // useEffect(() => {
-    //     calculateTotal();
-    //     // eslint-disable-next-line
-    // }, [subtotal, setSubtotal])
-
+    }, [personalShoppingCart, personalArticleInfo])
 
     return (
         <Fragment>

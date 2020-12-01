@@ -5,18 +5,11 @@ import axios from 'axios';
 import ArticleService from "../../../service/ArticleService";
 import UserService from "../../../service/UserService";
 import OrderService from "../../../service/OrderService";
+
+
 const SessionHandlerContext = createContext();
 export default SessionHandlerContext;
 
-
-let exampleUser = {
-    id: "4028810e76140b0d0176141002d20005",
-    email: "tester02@gurtnerbarbon.ch",
-    firstName: "A",
-    lastName: "B",
-    streetNumber: "Teststr. 50",
-    zipPlace: "8000 Zurich"
-};
 
 export const SessionHandlerContextProvider = (props) => {
     // const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
@@ -97,7 +90,7 @@ export const SessionHandlerContextProvider = (props) => {
             .then(res => {
                 if (res.data !== null) {
                     setPersonalShoppingCart(res.data);
-                    if (res.data.orderDetailsList !== undefined) {
+                    if (res.data.orderDetailsList !== null) {
                         console.log('SHOW ARTICLES INFO ', res.data.orderDetailsList)
                         setPersonalArticleInfo(res.data.orderDetailsList);
                         var articleArray = [];
@@ -184,7 +177,7 @@ export const SessionHandlerContextProvider = (props) => {
                     personalArticleInfo,
                     personalArticles,
                     getAllArticles,
-                    allArticles
+                    allArticles,
                 }}
             >
                 {props.children}

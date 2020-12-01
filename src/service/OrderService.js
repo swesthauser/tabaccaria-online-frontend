@@ -12,7 +12,7 @@ const OrderService = {
         return api.put(`/ordersdetails/${orderDetailId}`, dto);
     },
     deleteOrderDetails: (orderDetailId) => {
-        return api.delete(`/orderdetails/${orderDetailId}`);
+        return api.delete(`/ordersdetails/${orderDetailId}`);
     },
     updatePersonalShoppingCart: (id, dto) => {
         return api.put(`/orders/${id}`, dto);

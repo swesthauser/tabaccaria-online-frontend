@@ -71,7 +71,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ArticleCard({ article, articleInfo, removeFunc, shoppingCartView, detailView, handleFavorite, getFavorite }) {
 
-    const { ownFavorites } = useContext(SessionHandlerContext);
+    const { user } = useContext(SessionHandlerContext);
 
     /* Try getArticle over ArticleSinglePage */
     const classes = useStyles();
@@ -201,7 +201,10 @@ export default function ArticleCard({ article, articleInfo, removeFunc, shopping
                 <CardActions disableSpacing>
                     <IconButton
                         title={"Remove from my shopping cart"}
-                        onClick={() => removeFunc(articleInfo.id)}
+                        onClick={() => {
+                            console.log('ZEIG MIR BITTE ', articleInfo.id)
+                            {/* removeFunc(articleInfo.id) */}
+                        }}
                         className={clsx(classes.expand)}
                     >
                         <RemoveShoppingCartIcon />
