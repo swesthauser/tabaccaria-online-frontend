@@ -50,6 +50,8 @@ const InputNumber = ({ quantity, handleQuantity, articleInfo }) => {
                             setAmount(event.target.value)
                             if (articleInfo !== null) {
                                 handleQuantity(event, articleInfo);
+                            } else {
+                                handleQuantity(event);
                             }
                             setInputIsAllowed(false);
                         }

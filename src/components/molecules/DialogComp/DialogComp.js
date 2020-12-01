@@ -1,12 +1,36 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Dialog, DialogTitle, DialogContent, DialogActions, DialogContentText, FormControl, FilledInput, InputAdornment } from '@material-ui/core';
 import OwnButton from "../../atoms/OwnButton/OwnButton";
 import InputNumber from "../../atoms/InputNumber/InputNumber";
 import ArticleForm from "../../organisms/ArticleForm/ArticleForm";
+import SessionHandlerContext from "../../other/Context/SessionHandlerContext";
+import OrderService from "../../../service/OrderService";
 
-const DialogComp = ({ isOpen, handler, article, mode, titleDialog, confirmAction }) => {
+
+const DialogComp = ({ isOpen, handler, article, mode, titleDialog }) => {
+
+
+    const { personalShoppingCart } = useContext(SessionHandlerContext);
 
     const [amount, setAmount] = useState(1);
+
+    const addArticleToShoppingCart = (a, s) => {
+        const dto = {article: a, quantity: amount, order: s};
+        OrderService.createOrderDetail(dto)
+            .then(() => {
+            })
+            .catch(err => {
+                console.error('Error in DialogComp');
+            })
+            .finally(() => {
+                handler();
+            })
+
+    }
+
+    const handleAmount = (e) => {
+        setAmount(e.target.value);
+    }
 
     return (
         <div>
@@ -30,8 +54,8 @@ const DialogComp = ({ isOpen, handler, article, mode, titleDialog, confirmAction
                                 {"Select amount for '" + article.articleName + "' (Max. amount: 100 pcs.)"}
                             </DialogContentText>
                             <InputNumber
-                                amount={amount}
-                                setAmount={setAmount}
+                                quantity={amount}
+                                handleQuantity={handleAmount}
                             />
                         </div>
                         : null}
@@ -59,7 +83,7 @@ const DialogComp = ({ isOpen, handler, article, mode, titleDialog, confirmAction
                         : null}
                     {mode !== 'editArticle' && mode !== 'createArticle' ?
                         <OwnButton
-                            onClickFunc={confirmAction}
+                            onClickFunc={() => addArticleToShoppingCart(article, personalShoppingCart)}
                             typeOfButton={'confirm'}
                         />
                         : null}

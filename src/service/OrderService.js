@@ -16,6 +16,9 @@ const OrderService = {
     },
     updatePersonalShoppingCart: (id, dto) => {
         return api.put(`/orders/${id}`, dto);
+    },
+    createOrderDetail: (dto) => {
+        return api.post(`/ordersdetails`, dto);
     }
 
 }

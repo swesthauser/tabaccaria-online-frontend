@@ -69,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function ArticleCard({ article, articleInfo, removeFunc, shoppingCartView, detailView, handleFavorite, getFavorite, addToShoppingCart }) {
+export default function ArticleCard({ article, articleInfo, removeFunc, shoppingCartView, detailView, handleFavorite, getFavorite }) {
 
     const { ownFavorites } = useContext(SessionHandlerContext);
 
@@ -213,9 +213,6 @@ export default function ArticleCard({ article, articleInfo, removeFunc, shopping
                 handler={handlerOpen}
                 article={article}
                 mode={'inputNumber'}
-                confirmAction={() => {
-                    addToShoppingCart(article);
-                }}
             />
         </Card>
     );
