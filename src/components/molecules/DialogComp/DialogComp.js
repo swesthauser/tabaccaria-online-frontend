@@ -19,7 +19,7 @@ const DialogComp = ({ isOpen, handler, article, mode, titleDialog, confirmAction
                     {mode === 'inputNumber' ?
                         "To shopping cart"
                         : null}
-                    {mode === 'removeArticle' || mode === 'editArticle' ?
+                    {mode === 'removeArticle' || mode === 'editArticle' || mode === 'createArticle' ?
                         titleDialog
                         : null}
                 </DialogTitle>
@@ -29,7 +29,6 @@ const DialogComp = ({ isOpen, handler, article, mode, titleDialog, confirmAction
                             <DialogContentText>
                                 {"Select amount for '" + article.articleName + "' (Max. amount: 100 pcs.)"}
                             </DialogContentText>
-
                             <InputNumber
                                 amount={amount}
                                 setAmount={setAmount}
@@ -39,22 +38,31 @@ const DialogComp = ({ isOpen, handler, article, mode, titleDialog, confirmAction
                     {mode === 'editArticle' ?
                         <ArticleForm
                             article={article}
+                            mode={'edit'}
+                            handleDialog={handler}
+                        />
+                        : null}
+                    {mode === 'createArticle' ?
+                        <ArticleForm
+                            article={article}
+                            mode={'create'}
+                            handleDialog={handler}
                         />
                         : null}
                 </DialogContent>
                 <DialogActions>
-                    {mode !== 'editArticle' ?
+                    {mode !== 'editArticle' && mode !== 'createArticle' ?
                         <OwnButton
                             onClickFunc={handler}
                             typeOfButton={'cancel'}
                         />
-                    : null}
-                    {mode !== 'editArticle' ?
+                        : null}
+                    {mode !== 'editArticle' && mode !== 'createArticle' ?
                         <OwnButton
                             onClickFunc={confirmAction}
                             typeOfButton={'confirm'}
                         />
-                    : null}
+                        : null}
                 </DialogActions>
             </Dialog>
         </div>

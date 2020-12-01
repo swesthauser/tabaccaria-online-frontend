@@ -1,9 +1,27 @@
-import React, { useState, useEffect } from "react";
-import { makeStyles, TextField, Typography, Button, Switch } from "@material-ui/core";
+import React, { useState, useEffect, useContext } from "react";
+import { makeStyles, TextField, Typography, Button, Switch, FormControlLabel } from "@material-ui/core";
 import { Formik } from "formik";
+import { withStyles } from '@material-ui/core/styles';
 import { ValidationSchemaArticle } from "../../other/Validation/ValidationSchemaArticle";
 import OwnButton from "../../atoms/OwnButton/OwnButton";
+import ArticleService from "../../../service/ArticleService";
+import SessionHandlerContext from "../../other/Context/SessionHandlerContext";
+import { useHistory } from "react-router-dom";
 
+
+const BlueSwitch = withStyles({
+    switchBase: {
+        color: "#F3FAF0",
+        '&$checked': {
+            color: "#87C4F4",
+        },
+        '&$checked + $track': {
+            backgroundColor: "#87C4F4",
+        },
+    },
+    checked: {},
+    track: {},
+})(Switch);
 
 const useStyles = makeStyles((theme) => ({
     title: {
@@ -29,7 +47,9 @@ const useStyles = makeStyles((theme) => ({
         textDecoration: "none"
     },
     switch: {
-        margin: "10px"
+        margin: "10px",
+        marginRight: "80px"
+
     },
     footer: {
         textAlign: "center",
@@ -37,9 +57,17 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-const ArticleForm = ({ article }) => {
+const ArticleForm = ({ article, mode, handleDialog }) => {
+
+    const { getAllArticles } = useContext(SessionHandlerContext);
 
     const classes = useStyles();
+
+    const [isAvailable, setIsAvailable] = useState(article.available);
+
+    const handleAvailable = () => {
+        setIsAvailable(!isAvailable);
+    }
 
     return (
         <Formik
@@ -47,7 +75,33 @@ const ArticleForm = ({ article }) => {
             enableReinitialize
             validationSchema={ValidationSchemaArticle}
             onSubmit={(values) => {
-                console.log('User data: ', values)
+                var dto = {};
+                if (mode === 'edit') {
+                    dto = { ...article, ...values };
+                    ArticleService.update(dto.id, dto)
+                        .then(() => {
+                        })
+                        .catch(err => {
+                            console.error('Error in ArticleForm: ', err);
+                        })
+                        .finally(() => {
+                            handleDialog();
+                            getAllArticles();
+                        })
+                } else {
+                    dto = values;
+                    ArticleService.create(dto)
+                        .then(() => {
+                        })
+                        .catch(err => {
+                            console.error('Error in ArticleForm: ', err);
+                        })
+                        .finally(() => {
+                            handleDialog();
+                            getAllArticles();
+                        })
+                }
+                console.log('ArticleForm output ', dto);
             }}
         >
             {({ handleSubmit, errors, touched, handleChange, initialValues, dirty }) => {
@@ -88,17 +142,25 @@ const ArticleForm = ({ article }) => {
                                 error={errors.brand && touched.brand}
                                 helperText={touched.brand ? errors.brand : null}
                                 className={classes.input}
+                                defaultValue={initialValues.brand}
                             />
-                            {/* 
-                                Here comes a switch --> Bench App
-                            */}
+                            <FormControlLabel
+                                control={<BlueSwitch
+                                    checked={isAvailable}
+                                    onChange={handleAvailable}
+                                    color="primary"
+                                    name="available"
+                                    inputProps={{ 'aria-label': 'available checkbox' }}
+                                />}
+                                label="Available"
+                                className={classes.switch}
+                            />
                         </div>
-
                         <div className={classes.inputs}>
                             <TextField
                                 id="price"
                                 name="price"
-                                label="Price"
+                                label="Price *"
                                 variant="outlined"
                                 type="text"
                                 error={errors.price && touched.price}
@@ -122,7 +184,7 @@ const ArticleForm = ({ article }) => {
                             <OwnButton
                                 typeOfButton={"formikSubmit"}
                                 isNotChanged={!dirty}
-                                text={"Update"}
+                                text={mode === 'edit' ? "Update" : "Create"}
                             />
                         </div>
                     </form>

@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { makeStyles, TextField, Typography, Button, Switch } from "@material-ui/core";
 import { Formik } from "formik";
-import { ValidationSchema } from "../../other/Validation/ValidationSchema";
-import { ValidationSchemaUpdate } from "../../other/Validation/ValidationSchemaUpdate";
+import {  UserValidationSchema } from "../../other/Validation/UserValidationSchema";
 import OwnButton from "../../atoms/OwnButton/OwnButton";
 import UserService from "../../../service/UserService";
 import SessionHandlerContext from "../../other/Context/SessionHandlerContext";
@@ -59,18 +58,22 @@ const UserForm = ({ initialObject, modeRegister, goToLogin }) => {
         // eslint-disable-next-line
     }, [showPassword])
 
+                
+
+
     return (
         <Formik
             initialValues={initialObject}
             enableReinitialize
-            validationSchema={ValidationSchema}
+            validationSchema={UserValidationSchema}
             onSubmit={(values) => {
-                var dto = { ...initialObject, ...values };
+                var dto = { ...initialObject, ...values};
                 delete dto.emailRepeat;
                 delete dto.passwordRepeat;
                 console.log('DTO ', dto)
                 if (modeRegister) {
-                    dto = {...dto, username: values.email}
+                    dto = { ...dto, username: values.email }
+                    console.log('ZEIG ', dto)
                     UserService.create(dto)
                         .then(() => {
                             goToLogin();
@@ -94,6 +97,7 @@ const UserForm = ({ initialObject, modeRegister, goToLogin }) => {
                 return (
                     <form method="post" onSubmit={handleSubmit} onChange={handleChange}>
                         <div className={classes.inputs}>
+                            {console.log('ERRORS ', initialValues)}
                             <TextField
                                 id="email"
                                 name="email"
@@ -170,28 +174,42 @@ const UserForm = ({ initialObject, modeRegister, goToLogin }) => {
                         </div>
                         <div className={classes.inputs}>
                             <TextField
-                                id="streetNumber"
-                                name="streetNumber"
+                                id="addressId"
+                                name="addressId"
                                 label="Street + house number *"
                                 variant="outlined"
                                 multiline
                                 type="text"
-                                error={errors.streetNumber && touched.streetNumber}
-                                helperText={touched.streetNumber ? errors.streetNumber : null}
+                                error={errors.addressId && touched.addressId}
+                                helperText={touched.addressId ? errors.addressId : null}
                                 className={classes.input}
-                                defaultValue={initialValues.streetNumber != null ? initialValues.streetNumber : null}
+                                defaultValue={initialValues.addressId != null ? initialValues.addressId : null}
                             />
                             <TextField
-                                id="zipPlace"
-                                name="zipPlace"
-                                label="Zip + place *"
+                                id="zipPlace.zip"
+                                name="zipPlace.zip"
+                                label="Zip *"
                                 variant="outlined"
                                 multiline
                                 type="text"
-                                error={errors.zipPlace && touched.zipPlace}
-                                helperText={touched.zipPlace ? errors.zipPlace : null}
+                                error={errors.zip && touched.zip}
+                                helperText={touched.zip ? errors.zip : null}
                                 className={classes.input}
-                                defaultValue={initialValues.zipPlace}
+                                defaultValue={initialValues.zipPlace.zip}
+                            />
+                        </div>
+                        <div className={classes.inputs}>
+                            <TextField
+                                id="zipPlace.city"
+                                name="zipPlace.city"
+                                label="City *"
+                                variant="outlined"
+                                multiline
+                                type="text"
+                                error={errors.city && touched.city}
+                                helperText={touched.city ? errors.city : null}
+                                className={classes.input}
+                                defaultValue={initialValues.zipPlace.city}
                             />
                         </div>
                         <div className={classes.footer}>
@@ -212,6 +230,7 @@ const UserForm = ({ initialObject, modeRegister, goToLogin }) => {
                                 text={modeRegister ?
                                     "Sign up"
                                     : "Update"}
+                                onClickFunc={() => {console.log('VALUES ', values)}}
                             />
                             <Typography className={classes.helperText}>
                                 {modeRegister &&

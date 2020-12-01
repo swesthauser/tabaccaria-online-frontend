@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { List, Paper, Button } from '@material-ui/core';
 import ListItem from '@material-ui/core/ListItem';
@@ -17,6 +17,8 @@ import EditIcon from '@material-ui/icons/Edit';
 import DialogComp from "../../molecules/DialogComp/DialogComp";
 import { useHistory } from 'react-router-dom';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
+import ArticleService from '../../../service/ArticleService';
+import SessionHandlerContext from '../../other/Context/SessionHandlerContext';
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -38,14 +40,26 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
+const initialArticle = {
+    articleName: "",
+    articleDescription: "",
+    brand: "",
+    available: true,
+    price: null,
+    salePrice: null
+};
 
 const ArticleManagement = ({ articles }) => {
+
+    const { getAllArticles } = useContext(SessionHandlerContext);
 
     const [openRemove, setOpenRemove] = useState(false);
     const [articleToRemove, setArticleToRemove] = useState({});
 
     const [openEdit, setOpenEdit] = useState(false);
     const [articleToEdit, setArticleToEdit] = useState({});
+
+    const [openCreate, setOpenCreate] = useState(false);
 
     const history = useHistory();
 
@@ -57,6 +71,10 @@ const ArticleManagement = ({ articles }) => {
 
     const dialogHandlerEdit = () => {
         setOpenEdit(!openEdit);
+    }
+
+    const dialogHandlerCreate = () => {
+        setOpenCreate(!openCreate);
     }
 
     const checkFormat = (nAsString) => {
@@ -84,13 +102,32 @@ const ArticleManagement = ({ articles }) => {
         return stringMoreInformation;
     }
 
+    const removeArticle = () => {
+        ArticleService.delete(articleToRemove.id)
+            .then(() => {
+            })
+            .catch(err => {
+                console.error('Error in ArticleManagement: ', err);
+            })
+            .finally(() => {
+                dialogHandlerRemove();
+                getAllArticles();
+            })
+    }
+
     return (
         <Grid container>
             <Paper className={classes.paper}>
                 <Typography align={"center"} variant="h6" className={classes.title}>
                     <i>My articles</i>
                     <Typography align={"right"}>
-                            <IconButton title={"Add new article"} className={classes.button}>
+                            <IconButton
+                                onClick={() => {
+                                    dialogHandlerCreate();
+                                }}
+                                title={"Add new article"}
+                                className={classes.button}
+                            >
                                 <AddCircleIcon />
                             </IconButton>
                     </Typography>
@@ -106,9 +143,7 @@ const ArticleManagement = ({ articles }) => {
                                 </ListItemAvatar>
                                 <ListItemText
                                     primary={a.articleName}
-                                    secondary={a.salePrice != null ? "Current sale price: Fr. " + checkFormat(a.salePrice) + getOtherInformation(a)
-                                        : "Current price: Fr. " + checkFormat(a.price) + getOtherInformation(a)
-                                    }
+                                    secondary={a.salePrice !== 0 ? "Current sale price: Fr. " + checkFormat(a.salePrice) + getOtherInformation(a) : "Current price: Fr. " + checkFormat(a.price) + getOtherInformation(a)}
                                 />
                                 <ListItemSecondaryAction>
                                     <IconButton
@@ -146,7 +181,7 @@ const ArticleManagement = ({ articles }) => {
                 handler={dialogHandlerRemove}
                 mode={'removeArticle'}
                 titleDialog={"Remove article " + articleToRemove.articleName + "?"}
-                confirmAction={() => console.log("Delete article " + articleToRemove.articleName)}
+                confirmAction={() => removeArticle()}
             />
             <DialogComp
                 isOpen={openEdit}
@@ -154,6 +189,13 @@ const ArticleManagement = ({ articles }) => {
                 mode={'editArticle'}
                 titleDialog={"Edit your article  " + articleToEdit.articleName}
                 article={articleToEdit}
+            />
+            <DialogComp
+                isOpen={openCreate}
+                handler={dialogHandlerCreate}
+                mode={'createArticle'}
+                titleDialog={"Create an article"}
+                article={initialArticle}
             />
         </Grid>
 

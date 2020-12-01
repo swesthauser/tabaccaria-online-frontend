@@ -8,9 +8,9 @@ const validationMaxNames = "Max. 50 characters";
 const validationsMaxPasswords = "Max. 30 characters";
 const validationsMaxAddress = "Max. 250 characters";
 
-export const ValidationSchema = Yup.object().shape({
+export const UserValidationSchema = Yup.object().shape({
     id: Yup.string()
-        .nullable()
+        .nullable(true)
     ,
     email: Yup.string()
         .trim()
@@ -21,8 +21,7 @@ export const ValidationSchema = Yup.object().shape({
     emailRepeat: Yup.string()
         .trim()
         .email("Invalid email")
-        .nullable()
-        // .required("Email required")
+        .nullable(true)
         .max(50, validationMaxNames)
         .oneOf([Yup.ref('email')], "Emails don't match")
     ,
@@ -33,8 +32,7 @@ export const ValidationSchema = Yup.object().shape({
     ,
     passwordRepeat: Yup.string()
         .trim()
-        .nullable()
-        // .required('Password required')
+        .nullable(true)
         .max(50, validationsMaxPasswords)
         .oneOf([Yup.ref('password')], "Passwords don't match")
     ,
@@ -50,14 +48,19 @@ export const ValidationSchema = Yup.object().shape({
         .matches(regexName, validationName)
         .max(50, validationMaxNames)
     ,
-    streetNumber: Yup.string()
+    addressId: Yup.string()
         .trim()
         .required('Street and house number required')
         .max(250, validationsMaxAddress)
     ,
-    zipPlace: Yup.string()
-        .trim()
-        .required('Zip and place required')
-        .max(50, validationsMaxAddress)
-    ,
+    zipPlace: Yup.object().shape({
+        zip: Yup.string()
+            .trim()
+            .required('Zip required')
+            .max(50, validationsMaxAddress),
+        city: Yup.string()
+            .trim()
+            .required('Zip and place required')
+            .max(50, validationsMaxAddress)
+    })
 });

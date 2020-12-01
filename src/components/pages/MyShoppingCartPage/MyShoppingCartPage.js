@@ -46,77 +46,122 @@ const useStyles = makeStyles((theme) => ({
 
 const MyShoppingCartPage = () => {
     const classes = useStyles();
-    const { user } = useContext(SessionHandlerContext);
-    const [articles, setArticles] = useState([]);
-    const [amount, setAmount] = useState();
+    const { user, getShoppingCart, personalShoppingCart, personalArticleInfo, personalArticles } = useContext(SessionHandlerContext);
+    // const [articles, setArticles] = useState([]);
     const [subtotal, setSubtotal] = useState(0);
     const [total, setTotal] = useState(0);
-    // const [articles, setArticles] = useState([]);
-
-    const getArticles = () => {
-        // OrderService.getOwnShoppingCart(user.id)
-        //     .then(res => {
-        //         setArticles(res.data);
-        //     })
-        //     .catch(err => {
-        //         console.error('Error in MyShoppingCartPage: ', err);
-        //     })
-        // TO DO - need progress in BE
-    }
+    const [freight, setFreight] = useState(5);
 
     const calculateSubtotal = () => {
-        for (let i = 0; i < articles.length; i++) {
-            let num;
-            if (articles[i].salePrice == null) {
-                num = (parseFloat(articles[i].price) * parseFloat(articles[i].amount));
+        var num = 0;
+        for (let i = 0; i < personalArticleInfo.length; i++) {
+            if (personalArticleInfo[i].article.salePrice !== null) {
+                num += parseFloat(personalArticleInfo[i].article.salePrice) * parseFloat(personalArticleInfo[i].quantity);
             } else {
-                num = (parseFloat(articles[i].salePrice) * parseFloat(articles[i].amount));
+                num += parseFloat(personalArticleInfo[i].article.price) * parseFloat(personalArticleInfo[i].quantity);
             }
-            setSubtotal(s => s + num)
         }
+        setSubtotal(num);
+        let freightCharges = getFreightCharges(num);
+        console.log('LIEFERKOSTEN ', freightCharges);
+        let total = num + freightCharges;
+        console.log('Total ', total)
+        setFreight(freightCharges);
+        setTotal(total);
     }
 
-    const isInt = (n) => {
-        return n % 1 === 0;
-    }
-
-    const checkFormat = () => {
+    const checkFormat = (n) => {
         var numberInString;
-        if (subtotal * 10 % 1 === 0) {
-            numberInString = subtotal.toString();
-            numberInString += "0";
-            return numberInString;
+        if (n % 1 === 0) {
+            numberInString = n.toString();
+            return numberInString + ".-"
+        }
+        else if (n * 10 % 1 === 0) {
+            numberInString = n.toString();
+            return numberInString + "0";
         } else {
-            return subtotal;
+            return n;
         }
     }
 
-    const getFreightCharges = () => {
-        if (subtotal >= 70) {
+    const getFreightCharges = (num) => {
+        if (num >= 70) {
             return 0;
         } else {
             return 5;
         }
     }
 
-    const calculateTotal = () => {
-        setTotal(subtotal + getFreightCharges());
+    // const calculateTotal = () => {
+    //     setTotal(subtotal + getFreightCharges());
+    // };
+
+    // const getElements = () => {
+    //     console.log('ZEIG ', ownShoppingCart.orderDetailsList)
+    //    setElements(ownShoppingCart.orderDetailsList);
+    // }
+
+    const handleQuantity = (e, i) => {
+        const dto = {...i, quantity: e.target.value};
+        OrderService.updateOrderDetails(dto.id, dto)
+            .then(() => {
+            })
+            .catch(err => {
+                console.error('Error in MyShoppingCartPage: ', err);
+            })
+            .finally(() => {
+                getShoppingCart(user.id);
+            });
     }
 
+    const removeArticleFromShoppingCart = (id) => {
+        console.log('Delete orderDetail with id: ', id)
+        // TO DO
+        // OrderService.deleteOrderDetails(id)
+        //     .then(() => {
+        //     })
+        //     .catch(err => {
+        //         console.error('Error in MyShoppingCartPage: ', err);
+        //     })
+        //     .finally(() => {
+        //         getShoppingCart(user.id);
+        //     });
+    }
+
+    // const updateArticleInfo = (orderDetailId, dto) => {
+    //     OrderService.updateOrderDetails(orderDetailId, dto)
+    //         .then(() => {
+    //             getShoppingCart(user.id);
+
+    //         })
+    //         .catch(err => {
+    //             console.error('Error in MyShoppingCartPage: ', err);
+    //         });
+    // }
+
     useEffect(() => {
-        getArticles();
+        getShoppingCart(user.id);
+        // console.log('ZEIG 1', personalShoppingCart)
+        // console.log('ZEIG 2', personalArticleInfo)
+        // console.log('ZEIG 3', personalArticles)
         // eslint-disable-next-line
-    }, [])
+    }, [user])
+
+    // useEffect(() => {
+    //     getElements();
+    //     // eslint-disable-next-line
+    // }, [user])
 
     useEffect(() => {
         calculateSubtotal();
         // eslint-disable-next-line
-    }, [articles, setArticles])
+    }, [personalArticleInfo])
 
-    useEffect(() => {
-        calculateTotal();
-        // eslint-disable-next-line
-    }, [subtotal, setSubtotal])
+    // useEffect(() => {
+    //     calculateTotal();
+    //     // eslint-disable-next-line
+    // }, [subtotal, setSubtotal])
+
 
     return (
         <Fragment>
@@ -130,55 +175,62 @@ const MyShoppingCartPage = () => {
                     <Grid item xs={6}>
                         <Paper className={classes.paper}>
                             <i>My articles:</i>
-                            {articles.map(a => (
+                            {personalArticleInfo.map(i => (
                                 <Grid container spacing={3}>
                                     <Grid item xs={9}>
-                                        <ArticleCard article={a} shoppingCartView />
+                                        <ArticleCard
+                                            article={i.article}
+                                            articleInfo={i}
+                                            shoppingCartView
+                                            removeFunc={removeArticleFromShoppingCart}
+                                        />
                                     </Grid>
                                     <Grid item xs={3}>
                                         <div className={classes.inputNumber}>
                                             <InputNumber
-                                                amount={parseInt(a.amount)}
-                                                setAmount={setAmount}
+                                                quantity={parseInt(i.quantity)}
+                                                handleQuantity={handleQuantity}
+                                                articleInfo={i}
                                             />
                                         </div>
                                     </Grid>
                                 </Grid>
-
                             ))}
                         </Paper>
                     </Grid>
                     <Grid item xs={6}>
                         <Paper className={classes.paper}>
-                        <p><i>Total:</i></p>
+                            <p><i>Total:</i></p>
                             <Grid container spacing={3}>
                                 <Grid item xs={6}>
-                                    <table>
-                                        <tr>
-                                            <th>
-                                                Subtotal
-                                            </th>
-                                            <td>
-                                                Fr. {isInt(subtotal) ? subtotal + ".-" : checkFormat()}
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>
-                                                Freight charges
-                                            </th>
-                                            <td>
-                                                Fr. {getFreightCharges() + ".-"}
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th>
-                                                Total
-                                            </th>
+                                    {subtotal !== 0 ?
+                                        <table>
                                             <tr>
-                                                Fr. {isInt(total) ? subtotal + ".-" : checkFormat()}
+                                                <th>
+                                                    Subtotal
+                                            </th>
+                                                <td>
+                                                    Fr. {checkFormat(subtotal)}
+                                                </td>
                                             </tr>
-                                        </tr>
-                                    </table>
+                                            <tr>
+                                                <th>
+                                                    Freight charges
+                                            </th>
+                                                <td>
+                                                    Fr. {checkFormat(freight)}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th>
+                                                    Total
+                                            </th>
+                                                <tr>
+                                                    Fr. {checkFormat(total)}
+                                                </tr>
+                                            </tr>
+                                        </table>
+                                        : null}
                                 </Grid>
                                 <Grid item xs={6}>
                                     <OwnButton

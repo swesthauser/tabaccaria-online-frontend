@@ -54,10 +54,10 @@ const RootPage = (props) => {
     //     // eslint-disable-next-line
     // }, [user])
 
-    useEffect(() => {
-        getFavorites(user.id);
-        // eslint-disable-next-line
-    }, [])
+    // useEffect(() => {
+    //     getFavorites(user.id);
+    //     // eslint-disable-next-line
+    // }, [])
 
     useEffect(() => {
         getArticles();
@@ -96,9 +96,7 @@ const RootPage = (props) => {
         <Fragment>
             <NavbarHeader />
             <Typography />
-            <Grid
-                container
-            >
+            <Grid container>
                 {articles.map((a) => (
                     <Grid item xs={4}>
                         <ArticleCard article={a} shoppingCartView={false} handleFavorite={handleFavorite} getFavorite={checkPartOfFavorites(a)} />

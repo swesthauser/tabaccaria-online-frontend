@@ -10,8 +10,8 @@ const ArticleService = {
     create: (dto) => {
         return api.post(`/articles`, dto);
     },
-    update: (dto) => {
-        return api.put(`/articles`, dto);
+    update: (id, dto) => {
+        return api.put(`/articles/${id}`, dto);
     },
     getFavorites: (userId) => {
         return api.get(`/articles/user/${userId}`)

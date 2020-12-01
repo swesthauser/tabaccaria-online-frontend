@@ -19,18 +19,20 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const InputNumber = ({ amount, setAmount }) => {
+const InputNumber = ({ quantity, handleQuantity, articleInfo }) => {
 
     const classes = useStyles();
     const [inputIsAllowed, setInputIsAllowed] = useState(false);
 
+    const [amount, setAmount] = useState(quantity != null ? quantity : Number(0));
 
-    const handleAmount = (event) => {
-        if (inputIsAllowed && event.target.value <= 100) {
-            setAmount(event.target.value);
-            setInputIsAllowed(false);
-        }
-    }
+    // const handleAmount = (event) => {
+    //     if (inputIsAllowed && event.target.value <= 100) {
+    //         console.log('EVENT', event.target.value)
+    //         setAmount(event.target.value);
+    //         setInputIsAllowed(false);
+    //     }
+    // }
 
     return (
         <FormControl className={clsx(classes.margin, classes.textField)} variant="filled">
@@ -43,7 +45,15 @@ const InputNumber = ({ amount, setAmount }) => {
                 <FilledInput
                     id="filled-adornment-amount"
                     value={amount}
-                    onChange={(event) => handleAmount(event)}
+                    onChange={(event) => {
+                        if (inputIsAllowed && event.target.value <= 100) {
+                            setAmount(event.target.value)
+                            if (articleInfo !== null) {
+                                handleQuantity(event, articleInfo);
+                            }
+                            setInputIsAllowed(false);
+                        }
+                    }}
                     endAdornment={<InputAdornment position="end">{"Pcs."}</InputAdornment>}
                     aria-describedby="filled-amount-helper-text"
                     inputProps={{

@@ -69,7 +69,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function ArticleCard({ article, shoppingCart, detailView, handleFavorite, getFavorite }) {
+export default function ArticleCard({ article, articleInfo, removeFunc, shoppingCartView, detailView, handleFavorite, getFavorite, addToShoppingCart }) {
 
     const { ownFavorites } = useContext(SessionHandlerContext);
 
@@ -177,7 +177,7 @@ export default function ArticleCard({ article, shoppingCart, detailView, handleF
                     : null}
 
             </CardContent>
-            {!shoppingCart ?
+            {!shoppingCartView ?
                 <CardActions disableSpacing>
                     <IconButton
                         title={isFavorite ? "Remove from my favorites" : "Add to my favorites"}
@@ -201,7 +201,7 @@ export default function ArticleCard({ article, shoppingCart, detailView, handleF
                 <CardActions disableSpacing>
                     <IconButton
                         title={"Remove from my shopping cart"}
-                        onClick={() => console.log('Remove article with id ' + article.id)}
+                        onClick={() => removeFunc(articleInfo.id)}
                         className={clsx(classes.expand)}
                     >
                         <RemoveShoppingCartIcon />
@@ -213,6 +213,9 @@ export default function ArticleCard({ article, shoppingCart, detailView, handleF
                 handler={handlerOpen}
                 article={article}
                 mode={'inputNumber'}
+                confirmAction={() => {
+                    addToShoppingCart(article);
+                }}
             />
         </Card>
     );

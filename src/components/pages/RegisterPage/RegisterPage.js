@@ -16,8 +16,11 @@ const object = {
     passwordRepeat: '',
     firstName: '',
     lastName: '',
-    streetNumber: '',
-    zipPlace: ''
+    addressId: '',
+    zipPlace: {
+        zip: '',
+        city: ''
+    }
 }
 
 const RegisterPage = () => {

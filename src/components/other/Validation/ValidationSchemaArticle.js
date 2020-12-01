@@ -11,12 +11,12 @@ export const ValidationSchemaArticle = Yup.object().shape({
     ,
     articleDescription: Yup.string()
         .trim()
-        .nullable()
+        .nullable(true)
         .max(250, validationsMaxDescr)
     ,
     brand: Yup.string()
         .trim()
-        .nullable()
+        .nullable(true)
         .max(50, validationMaxNames)
     ,
     price: Yup.number()
@@ -24,6 +24,8 @@ export const ValidationSchemaArticle = Yup.object().shape({
         .required("Price required")
     ,
     salePrice: Yup.number()
+        .nullable(true)
         .positive('Must be a positive number')
         .lessThan(Yup.ref('price'), "Sale price must be smaller than price")
+        .transform((_, val) => val === val ? val : null)
 });

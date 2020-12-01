@@ -9,6 +9,7 @@ import SessionHandlerContext from "../../other/Context/SessionHandlerContext";
 import UserForm from "../../organisms/UserForm/UserForm";
 import ArticleManagement from "../../organisms/ArticleManagement/ArticleManagement";
 import UserService from "../../../service/UserService";
+import ArticleService from "../../../service/ArticleService";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -54,25 +55,13 @@ const headCells = [
 
 const MyAccountPage = () => {
 
-    const { user } = useContext(SessionHandlerContext);
+    const { user, getAllArticles, allArticles } = useContext(SessionHandlerContext);
 
     const classes = useStyles();
 
-    const [articlesToManage, setArticlesToManage] = useState([]);
-
-
-    const getArticlesToManage = () => {
-        UserService.getOwnArticles(user.id)
-            .then(res => {
-                setArticlesToManage(res.data);
-            })
-            .catch(err => {
-                console.error('Error in MyAccountPage: ', err);
-            });
-    }
 
     useEffect(() => {
-       getArticlesToManage();
+        getAllArticles();
        // eslint-disable-next-line
     }, [])
 
@@ -111,7 +100,7 @@ const MyAccountPage = () => {
                     <UserForm initialObject={user} modeRegister={false}/>
                     : null}
                 {value === 'articles' ?
-                    <ArticleManagement articles={articlesToManage}/>
+                    <ArticleManagement articles={allArticles}/>
                     : null}
             </Paper>
         </Fragment>
