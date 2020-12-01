@@ -23,7 +23,7 @@ const BrandTitle = ({ size, styleText, text, onClickFunc }) => {
                 className={styleText}
             >
 
-                Tabacsabrivo - safely cheapest
+                Tabaccaria Online
             <p>{text}</p>
             </Typography>
         </Button>

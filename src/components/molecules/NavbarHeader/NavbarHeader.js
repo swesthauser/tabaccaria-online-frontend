@@ -11,7 +11,7 @@ import BrandTitle from "../../atoms/BrandTitle/BrandTitle";
 import SessionHandlerContext from "../../other/Context/SessionHandlerContext";
 import LockIcon from '@material-ui/icons/Lock';
 import { useHistory } from 'react-router-dom'
-
+import Logo from './../../../logo.png'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -93,11 +93,13 @@ const NavbarHeader = () => {
         <div className={classes.root}>
             <AppBar position="static" color="transparent">
                 <Toolbar>
+                <img src={Logo} alt="" width={'150px'} onClickFunc={goToStart}/>
                     <BrandTitle
                         size={"h3"}
                         styleText={classes.title}
                         onClickFunc={goToStart}
-                    />
+                    /> 
+                   
                     {user != null ?
                         <Button
                             color="inherit"
