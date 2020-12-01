@@ -11,7 +11,7 @@ import BrandTitle from "../../atoms/BrandTitle/BrandTitle";
 import SessionHandlerContext from "../../other/Context/SessionHandlerContext";
 import LockIcon from '@material-ui/icons/Lock';
 import { useHistory } from 'react-router-dom'
-
+import Logo from "../../../../src/logo.png";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -72,7 +72,7 @@ const NavbarHeader = () => {
     //         return null;
     //     })
     // }
-    
+
     // const getShoppingCart = () => {
     //     ArticleService.getShoppingCart()
     //     .then(res => {
@@ -93,6 +93,7 @@ const NavbarHeader = () => {
         <div className={classes.root}>
             <AppBar position="static" color="transparent">
                 <Toolbar>
+                    <img src={Logo} alt="" width={'150px'} onClickFunc={goToStart} />
                     <BrandTitle
                         size={"h3"}
                         styleText={classes.title}
@@ -125,8 +126,8 @@ const NavbarHeader = () => {
                         onClick={user != null ? goToAccount : goToLogin}
                     >
                         {user != null ?
-                            <Avatar className={classes.avatar}>{user.firstName.substring(0, 1).toUpperCase()+user.lastName.substring(0, 1).toUpperCase()}</Avatar>
-                        :
+                            <Avatar className={classes.avatar}>{user.firstName.substring(0, 1).toUpperCase() + user.lastName.substring(0, 1).toUpperCase()}</Avatar>
+                            :
                             <PersonIcon />
                         }
                     </Button>

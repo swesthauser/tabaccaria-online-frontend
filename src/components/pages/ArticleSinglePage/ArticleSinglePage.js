@@ -1,9 +1,10 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect, Fragment, useContext } from 'react';
 import { Grid, Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import ArticleService from '../../../service/ArticleService';
 import NavbarHeader from '../../molecules/NavbarHeader/NavbarHeader';
 import ArticleCard from '../../organisms/ArticleCard/ArticleCard';
+import SessionHandlerContext from '../../other/Context/SessionHandlerContext';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -22,24 +23,16 @@ let exampleArticle = {
 
 const ArticleSinglePage = (props) => {
 
-    const articleId = props.match.params.id;
+    // const { getSingleArticle, singleArticle } = useContext(SessionHandlerContext);
 
-    console.log('ID', articleId)
+    // const articleId = props.match.params.id;
 
-    const [article, setArticle] = useState();
     const classes = useStyles();
 
-    const getArticleById = () => {
-        ArticleService.getById(articleId)
-            .then(res => {
-                setArticle(res.data);
-            })
-    }
-
-    useEffect(() => {
-        getArticleById();
-        // eslint-disable-next-line
-    }, [])
+    // useEffect(() => {
+    //     getSingleArticle(articleId);
+    //     // eslint-disable-next-line
+    // }, [])
 
     return (
         <Fragment>

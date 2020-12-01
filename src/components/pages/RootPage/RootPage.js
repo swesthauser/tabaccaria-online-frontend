@@ -97,9 +97,9 @@ const RootPage = (props) => {
             <NavbarHeader />
             <Typography />
             <Grid container>
-                {articles.map((a) => (
+                {articles.map((a, i = 1) => (
                     <Grid item xs={4}>
-                        <ArticleCard article={a} shoppingCartView={false} handleFavorite={handleFavorite} getFavorite={checkPartOfFavorites(a)} />
+                        <ArticleCard index={i }article={a} shoppingCartView={false} handleFavorite={handleFavorite} getFavorite={checkPartOfFavorites(a)} />
                     </Grid>
                 ))}
             </Grid>
